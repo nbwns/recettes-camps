@@ -1,3 +1,4 @@
+require('dotenv').config()
 import axios from 'axios'
 export default {
   // Target (https://go.nuxtjs.dev/config-target)
@@ -64,25 +65,24 @@ export default {
   generate: {
     routes(){
       console.log("generate")
-      axios({
+      let recettes = axios({
         url: "https://api.baseql.com/airtable/graphql/apptVpg9XpET0IEyv",
         method: "post",
         data: {
           query: `{
             recettes {
-              compositions {
-                ingredients {
-                  nom
-                }
-                quantite
-                unites {
-                  nom
-                }
-              }
               nom
-              id
               nombreDePersonnes
               procedure
+              compositions {
+                  nom
+                  quantite
+                  unites
+                  nomIngredient
+                  prix
+              }
+              prix
+              slug
             }
           }`,
         },
@@ -90,13 +90,17 @@ export default {
       console.log("plop")
         return result.data.data.recettes.map(recette => {
           return {
-            route: '/recette/' + recette.id,
+            route: '/recette/' + recette.slug,
             payload: recette
           }
-        })
-        
-        
+        })        
       });
+
+      return Promise.all([recettes]).then((values) => {
+        console.log(values);
+        return values;
+      });
+      
      
     }
   }
