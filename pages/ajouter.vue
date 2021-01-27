@@ -11,13 +11,31 @@
         </div>
       </section>
 
-      <div class="container">
+       <div class="container" v-if="ajoutee">
+        <div class="columns">
+            <div class="column">
+                <div class="notification is-primary">
+                    Recette ajoutée ! <br/>
+                    <nuxt-link :to="{path: '/recette/'+slug}">Je vais voir la recette</nuxt-link>
+                </div>
+            </div>
+        </div>
+       </div>
+
+      <div class="container" v-if="!ajoutee">
         <div class="columns">
             <div class="column is-half">
                 <div class="field">
                     <label class="label">Nom de la recette</label>
                     <div class="control">
-                        <input class="input" type="text" placeholder="Salade de pommes de terre">
+                        <input class="input" type="text" placeholder="Salade de pommes de terre" v-model="recette.nom">
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label class="label">Auteur</label>
+                    <div class="control">
+                        <input class="input" type="text" placeholder="97ème de Saint-Glinglin" v-model="recette.auteur">
                     </div>
                 </div>
 
@@ -25,7 +43,7 @@
                     <label class="label">Type</label>
                     <div class="control">
                         <div class="select">
-                            <select>
+                            <select v-model="recette.type">
                                 <option>Omnivore</option>
                                 <option>Végétarien</option>
                                 <option>Végétalien</option>
@@ -37,14 +55,14 @@
                 <div class="field">
                     <label class="label">Nombre de couverts</label>
                     <div class="control">
-                        <input class="input" type="number" placeholder="5">
+                        <input class="input" type="number" placeholder="5" v-model="recette.couverts">
                     </div>
                 </div>
 
                 <div class="field">
                     <label class="label">Procédure</label>
                     <div class="control">
-                        <textarea class="textarea" placeholder="1. Eplucher les pommes de terre"></textarea>
+                        <textarea class="textarea" placeholder="1. Eplucher les pommes de terre" v-model="recette.procedure"></textarea>
                     </div>
                 </div>
 
@@ -52,7 +70,7 @@
                     <label class="label">Ingrédients</label>
                 </div>
 
-                <div class="field is-horizontal" v-for="compo in compositions" :key="compo.id">
+                <div class="field is-horizontal" v-for="compo in recette.compositions" :key="compo.id">
                     
                     <div class="field-body">
                         <div class="field">
@@ -86,7 +104,7 @@
 
                 <div class="field">
                     <div class="control">
-                        <button class="button is-primary">Envoyer</button>
+                        <button class="button is-primary" @click="ajouter()">Envoyer</button>
                     </div>
                 </div>
 
@@ -107,26 +125,35 @@ import axios from "axios"
 export default {
      data () {
         return {
-            compositions: [
-                {
-                    id:1,
-                    quantite: null,
-                    unite: 'gr',
-                    ingredient: null
-                },
-                {
-                    id:2,
-                    quantite: null,
-                    unite: 'gr',
-                    ingredient: null
-                }
-            ],
-            ingredients: []
+            recette: {
+                nom: null,
+                auteur: null,
+                couverts: null,
+                procedure: null,
+                type: 'Omnivore',
+                compositions: [
+                    {
+                        id:1,
+                        quantite: null,
+                        unite: 'gr',
+                        ingredient: {code:0, label: null}
+                    },
+                    {
+                        id:2,
+                        quantite: null,
+                        unite: 'gr',
+                        ingredient: {code:0, label: null}
+                    }
+                ]
+            },
+            ingredients: [],
+            ajoutee: false,
+            slug: null
         }
     },
     methods:{
         ajouterIngredient() {
-            this.compositions.push(
+            this.recette.compositions.push(
                 {
                     id:2,
                     quantite: null,
@@ -134,6 +161,14 @@ export default {
                     ingredient: null
                 }
             );
+        },
+        ajouter(){
+            console.log(this.recette)
+            axios.post("https://hook.integromat.com/rh9d6t7q8kxjiam2mx48q7d11ts00afs", this.recette)
+            .then(response => {
+                this.slug = response.data.slug;
+                this.ajoutee = true;
+            })
         }
     },
     mounted(){
@@ -149,8 +184,12 @@ export default {
             }`,
             },
         }).then((result) => {
-            console.log(result.data)
-            this.ingredients = result.data.data.ingredients.map(i => i.nom);
+            console.log(JSON.stringify(result.data))
+            this.ingredients = result.data.data.ingredients.map(i => ({
+                code: i.id, 
+                label: i.nom
+                })
+            );
         })
     }
   }
