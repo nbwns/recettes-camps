@@ -1,3 +1,44 @@
+:root {
+    --color-blue: #084a6c;
+    --color-teal: #569aa0;
+    --color-green: #80aea1;
+    --color-yellow: #dbe391;
+    --color-white: #f9f9f7; 
+  }
+
 html, body{
     font-family: 'Lato', sans-serif;
+}
+
+a{
+    color: var(--color-teal);
+}
+
+a:hover{
+    color: var(--color-green);
+}
+
+a:visited{
+    color: var(--color-blue);
+}
+
+.hero.is-primary{
+    background-color: var(--color-teal);
+}
+
+.title{
+    font-family: 'Yanone Kaffeesatz', sans-serif;
+}
+
+.message.is-info {
+    background-color: var(--color-white);
+}
+
+.message.is-info .message-header {
+    background-color: var(--color-blue);
+    color: #fff;
+}
+
+.clickable{
+    cursor: pointer;
 }

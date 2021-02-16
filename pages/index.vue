@@ -7,7 +7,7 @@
               Camps zéro déchet
             </h1>
             <h2 class="subtitle">
-              Fiches recettes
+              Fiches recettes et création de menus
             </h2>
           </div>
         </div>
