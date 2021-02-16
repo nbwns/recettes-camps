@@ -13,12 +13,14 @@ export default {
       { hid: 'description', name: 'description', content: '' }
     ],
     link: [
-      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
+      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
+      { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Lato&family=Yanone+Kaffeesatz&display=swap'}
     ]
   },
 
   // Global CSS (https://go.nuxtjs.dev/config-css)
   css: [
+    'assets/css/main.css'
   ],
 
   // Plugins to run before rendering page (https://go.nuxtjs.dev/config-plugins)
@@ -73,6 +75,7 @@ export default {
         data: {
           query: `{
             recettes {
+              id,
               nom
               nombreDePersonnes
               procedure
@@ -92,7 +95,7 @@ export default {
       console.log("plop")
         return result.data.data.recettes.map(recette => {
           return {
-            route: '/recette/' + recette.slug,
+            route: 'recette/' + recette.slug,
             payload: recette
           }
         })        
@@ -100,10 +103,11 @@ export default {
 
       return Promise.all([recettes]).then((values) => {
         console.log(values);
-        return values;
+        return values[0];
       });
       
      
-    }
+    },
+    fallback: true
   }
 }

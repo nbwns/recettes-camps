@@ -77,10 +77,9 @@ export default {
         console.log(payload);
         console.log(params)
         if (payload){
-            return { recette: payload };
+            return { recette: payload, plates: payload.nombreDePersonnes };
         }
         else {
-            console.log("get...")
             return axios({
                 url: "https://api.baseql.com/airtable/graphql/apptVpg9XpET0IEyv",
                 method: "post",
@@ -102,7 +101,6 @@ export default {
                 }`,
                 },
             }).then((result) => {
-                console.log(result.data)
                 return {
                     recette: result.data.data.recettes[0],
                     plates: result.data.data.recettes[0].nombreDePersonnes
