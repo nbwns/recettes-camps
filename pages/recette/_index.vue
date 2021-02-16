@@ -13,6 +13,15 @@
 
         <div class="container">  
             <div class="columns">
+                <div class="column">
+                    <article class="message">
+                        <div class="message-body">
+                            {{recette.description}}
+                        </div>
+                    </article>
+                </div>
+            </div>  
+            <div class="columns is-mobile">
                 <div class="column is-half">
                      <div class="field is-horizontal">
                         <div class="field-label ">
@@ -33,7 +42,7 @@
                 <div class="column">
                     <h2 class="is-size-4">Ingrédients 🥕</h2>
                     
-                    <div class="columns m-0 p-0">
+                    <div class="columns m-0 p-0 is-mobile">
                         <div class="column">
                             <strong>Quantité</strong>
                         </div>
@@ -45,7 +54,7 @@
                             </strong>
                         </div>
                     </div>
-                    <div v-for="compo in recette.compositions" :key="compo.nom" class="columns m-0 p-0">
+                    <div v-for="compo in recette.compositions" :key="compo.nom" class="columns m-0 p-0 is-mobile">
                         <div class="column">
                             {{Math.floor(compo.quantite * plateRatio)}} {{compo.unites}} {{compo.nomIngredient[0]}}
                         </div>
@@ -53,14 +62,14 @@
                             {{ (compo.prix * plateRatio).toFixed(2) }} €
                         </div>
                     </div>
-                    <div class="columns">
+                    <div class="columns is-mobile m-0 p-0">
                         <div class="column"><strong>Prix du plat 💰</strong></div>
                         <div class="column">{{(recette.prix * plateRatio).toFixed(2)}} €</div>
                     </div>
                 </div>
                 <div class="column">
                     <h2 class="is-size-4">Préparation 🔪</h2>
-                    <div v-html="procedure"></div>
+                    <div class="pl-5" v-html="procedure"></div>
                 </div>
             </div>            
         </div>
@@ -116,6 +125,7 @@ export default {
                 query: `{
                    recettes(slug: "${params.index}") {
                         nom
+                        description
                         nombreDePersonnes
                         procedure
                         compositions {

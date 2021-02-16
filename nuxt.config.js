@@ -76,7 +76,8 @@ export default {
         data: {
           query: `{
             recettes {
-              id,
+              id
+              description
               nom
               nombreDePersonnes
               procedure

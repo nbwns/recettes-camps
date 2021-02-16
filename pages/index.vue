@@ -25,6 +25,9 @@
                   <p class="title">
                     {{recette.nom}}
                   </p>
+                  <div class="content">
+                    {{recette.introduction}}
+                  </div>
                   <span class="tag is-success is-light">{{recette.diet}}</span>
                 </div>
                 <footer class="card-footer">
@@ -43,6 +46,15 @@
             </div>
         </div>
       </div>
+
+      <footer class="footer">
+        <div class="content has-text-centered">
+          <p>
+            Outil cuisiné par <a href="https://www.fristouille.org">Fristouille</a>
+          </p>
+        </div>
+      </footer>
+      <nuxt-link to="ajouter"><div class="fab"> + </div></nuxt-link>
     </div>
 </template>
 
@@ -64,7 +76,8 @@ export default {
                 recettes(_order_by: "nom") {
                   nom
                   slug,
-                  diet
+                  diet,
+                  introduction
                 }
             }`,
             },
@@ -77,6 +90,29 @@ export default {
   }
 </script>
 
-<style>
+<style scoped>
+.fab {
+   width: 70px;
+   height: 70px;
+   background-color: var(--color-yellow);
+   border-radius: 50%;
+   box-shadow: 0 2px 4px 0 #666;
+   
+   font-size: 50px;
+   line-height: 70px;
+   color: var(--color-blue);
+   text-align: center;
+   
+   position: fixed;
+   right: 20px;
+   bottom: 20px;
+   
+  transition: all 0.1s ease-in-out;
+  cursor: pointer;
+}
 
+.fab:hover {
+   box-shadow: 0 6px 14px 0 #666;
+   transform: scale(1.05);
+}
 </style>
