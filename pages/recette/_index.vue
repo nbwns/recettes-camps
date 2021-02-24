@@ -1,18 +1,33 @@
 <template>
     <div>
-      <section class="hero">
-        <div class="hero-body">
-          <div class="container">
-            <nuxt-link to="/">&lt; Retour</nuxt-link>
-            <h1 class="title pt-2">
-              {{recette.nom}}
-            </h1>
-          </div>
-        </div>
-      </section>
+        <section class="hero">
+            <div class="hero-body">
+                <div class="container">
+                    <nav class="level">
+                        <div class="level-left">
+                        <div class="level-item">
+                            <div class="container">
+                                <nuxt-link to="/">&lt; Retour</nuxt-link>
+                                <h1 class="title pt-2">
+                                {{recette.nom}}
+                                </h1>
+                            </div>
+                        </div>
+                        </div>
+                        <div class="level-right">
+                            
+                                <button class="button">Mon menu de camp
+                                    <span class="tag ml-2">{{menu.length}}</span>
+                                </button>
+                            
+                        </div>
+                    </nav>
+                </div>
+            </div>
+        </section>
 
         <div class="container">  
-            <div class="columns">
+            <div class="columns" v-if="recette.description">
                 <div class="column">
                     <article class="message">
                         <div class="message-body">
@@ -21,11 +36,11 @@
                     </article>
                 </div>
             </div>  
-            <div class="columns is-mobile">
+            <div class="columns">
                 <div class="column is-half">
                      <div class="field is-horizontal">
                         <div class="field-label ">
-                            <label class="label">Couverts 🍴</label>
+                            <label class="label">Couverts</label>
                         </div>
                         <div class="field-body">
                             <div class="field is-narrow">
@@ -36,11 +51,18 @@
                         </div>
                     </div>
                 </div>
+                <div class="column is-mobile">
+                    <div class="buttons">
+                        <button class="button is-primary" @click="addToMenu(recette)">📝 Ajouter au menu</button>
+                        <button class="button">✨ Personnaliser</button>
+                        <button class="button">🖨️ Imprimer</button>
+                    </div>
+                </div>
             </div>
            
             <div class="columns">
                 <div class="column">
-                    <h2 class="is-size-4">Ingrédients 🥕</h2>
+                    <h2 class="is-size-4">Ingrédients</h2>
                     
                     <div class="columns m-0 p-0 is-mobile">
                         <div class="column">
@@ -48,8 +70,8 @@
                         </div>
                         <div class="column">
                             <strong>Prix indicatif 
-                                    <span class="icon">
-                                        <i class="fas fa-question-circle clickable" @click="modal = true"></i>
+                                    <span class="clickable"  @click="modal = true">
+                                        ❓
                                     </span>
                             </strong>
                         </div>
@@ -63,12 +85,12 @@
                         </div>
                     </div>
                     <div class="columns is-mobile m-0 p-0">
-                        <div class="column"><strong>Prix du plat 💰</strong></div>
+                        <div class="column"><strong>Prix du plat</strong></div>
                         <div class="column">{{(recette.prix * plateRatio).toFixed(2)}} €</div>
                     </div>
                 </div>
                 <div class="column">
-                    <h2 class="is-size-4">Préparation 🔪</h2>
+                    <h2 class="is-size-4">Préparation</h2>
                     <div class="pl-5" v-html="procedure"></div>
                 </div>
             </div>            
@@ -94,8 +116,12 @@
 <script>
 import axios from "axios"
 import marked from 'marked'
+import Header from '~/components/Header'
 
 export default {
+    components: {
+      Header
+    },
      data () {
         return {
             recette: null,
@@ -109,7 +135,15 @@ export default {
         },
         plateRatio(){
             return this.plates / this.recette.nombreDePersonnes;
+        },
+        menu () {
+            return this.$store.state.menu || []
         }
+    },
+    methods:{
+      addToMenu(recette){
+          this.$store.commit('add', recette);
+      }
     },
     asyncData({ params, error, payload }){
         console.log(payload);

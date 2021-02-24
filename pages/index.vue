@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="page-wrapper">
       <section class="hero is-primary">
         <div class="hero-body">
           <div class="container">
@@ -17,32 +17,29 @@
         ça arrive...
       </div>
 
-      <div class="container">
-        <div class="columns mt-6">
+      <div class="container content-wrapper">
+        <div class="columns is-multiline  mt-6">
             <div class="column is-one-quarter" v-for="recette in recettes" :key="recette.slug">
-              <div class="card" >
-                <div class="card-content">
-                  <p class="title">
-                    {{recette.nom}}
-                  </p>
-                  <div class="content">
-                    {{recette.introduction}}
+              <nuxt-link :to="{path: '/recette/'+recette.slug}">
+                <div class="card" >
+                  <div class="card-content">
+                    <p class="title">
+                      {{recette.nom}}
+                    </p>
+                    <div class="content">
+                      {{recette.introduction}}
+                    </div>
+                    <span class="tag is-success is-light">{{recette.diet}}</span>
                   </div>
-                  <span class="tag is-success is-light">{{recette.diet}}</span>
+                  <footer class="card-footer">
+                    <p class="card-footer-item">
+                      <span>
+                        <button class="button is-primary">Voir la recette</button>
+                      </span>
+                    </p>
+                  </footer>
                 </div>
-                <footer class="card-footer">
-                  <p class="card-footer-item">
-                    <span>
-                      <nuxt-link :to="{path: '/recette/'+recette.slug}">Voir la recette</nuxt-link>
-                    </span>
-                  </p>
-                  <p class="card-footer-item">
-                    <span>
-                      Ajouter au menu
-                    </span>
-                  </p>
-                </footer>
-              </div>
+              </nuxt-link>
             </div>
         </div>
       </div>
@@ -66,6 +63,11 @@ export default {
             recettes: [],
             loading: true
         }
+    },
+    methods:{
+      addToMenu(recette){
+          this.$store.commit('add', recette);
+      }
     },
     mounted(){
         return axios({
@@ -91,6 +93,16 @@ export default {
 </script>
 
 <style scoped>
+.page-wrapper {
+	display: flex;
+	min-height: 100vh;
+	flex-direction: column;
+}
+
+.content-wrapper {
+	flex: 1;
+}
+
 .fab {
    width: 70px;
    height: 70px;
