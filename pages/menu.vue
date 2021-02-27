@@ -4,14 +4,14 @@
           <h1 class="title is-1">Mon menu de camp</h1>
       </Header>
       <div class="container">
-        <h2 class="title is-3">Recettes non-planifiées</h2>
+        <h2 class="title is-3">Recettes disponibles</h2>
         <div class="columns">
           <div class="column" v-if="unplannedRecipes.length > 0">
               <draggable
                 v-model="unplannedRecipes" group="menu"  
               >
-                <span class="tag is-large" v-for="r in unplannedRecipes" :key="r.slug">
-                  {{r.nom}}
+                <span class="tag is-large m-2 grabbable" v-for="r in unplannedRecipes" :key="r.slug">
+                  <i class="fa fa-ellipsis-v is-size-7 mr-2"></i> {{r.nom}}
                 </span>
               </draggable>
               
@@ -30,21 +30,25 @@
         <h2 class="title is-3">Menu de camp</h2>
         <div class="columns">
           <div class="column" v-if="menu">
-             <!--<draggable
-                v-model="menu"  
-              >-->
-                <div v-for="day in menu" :key="day.date" class="box">
-                    {{day.date}}
-                    <draggable
-                      :list="day.recipes"
-                      group="menu"
-                    >
-                    <div class="box" v-for="r in day.recipes" :key="r.slug">
-                        {{r.nom}}
-                    </div>
-                    </draggable>
+              <div class="card mb-2" v-for="day in menu" :key="day.date">
+                  <header class="card-header">
+                    <p class="card-header-title">
+                      {{day.date}}
+                    </p>
+                  </header>
+                  <div class="card-content">
+                      <div class="slot">
+                          <draggable
+                          :list="day.recipes"
+                          group="menu"
+                        >
+                            <span class="tag is-large m-2 grabbable" v-for="r in day.recipes" :key="r.slug">
+                                <i class="fa fa-ellipsis-v is-size-7 mr-2"></i> {{r.nom}}
+                            </span>
+                          </draggable>
+                      </div>
+                  </div>
                 </div>
-             <!--</draggable>-->
           </div>
           <div class="column" v-else>
               <article class="message is-warning">
@@ -132,7 +136,16 @@ export default {
       },
       menu(){
         return this.$store.state.menu;
-      }
+      },
+      myList: {
+        get() {
+            return this.$store.state.menu
+        },
+        set(value) {
+            console.log(value)
+            //this.$store.commit('updateList', value)
+        }
+    }
     },
     methods:{
       initMenu(){
@@ -163,6 +176,10 @@ export default {
 }
 </script>
 
-<style>
-
+<style scoped>
+  .slot{
+    border: 1px gray dashed;
+    min-height: 48px;
+    border-radius: 2px;
+  }
 </style>

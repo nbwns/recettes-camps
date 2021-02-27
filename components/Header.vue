@@ -3,19 +3,24 @@
             <div class="hero-body" >
                 <div class="container">
                     <nav class="level">
-                        <div class="level-left">
-                        <div class="level-item">
-                            <div class="container">
+                          <div class="navbar-brand">
+                              <div class="container">
                                <slot></slot>
                             </div>
+                            <a role="button" class="navbar-burger" :class="{'is-active': burgerNav}" aria-label="menu" aria-expanded="false" @click="burgerNav = !burgerNav">
+                                <span aria-hidden="true"></span>
+                                <span aria-hidden="true"></span>
+                                <span aria-hidden="true"></span>
+                            </a>
+                          </div>
+                        <div class="navbar-menu" :class="{'is-active': burgerNav}">
+                                <div class="navbar-end">
+                                <nuxt-link class="navbar-item" to="/">Recettes</nuxt-link>
+
+                                <nuxt-link class="navbar-item" to="/menu">Menu de camp</nuxt-link>
+                                </div>
                         </div>
-                        </div>
-                        <div class="level-right">
-                            
-                                <nuxt-link class="button" to="/menu">Mon menu de camp</nuxt-link>
-                                
-                            
-                        </div>
+
                     </nav>
                 </div>
             </div>
@@ -25,11 +30,11 @@
 <script>
 export default {
     props: ['className'],
-    computed: {
-        menu () {
-            return this.$store.state.menu || []
+    data(){
+        return {
+            burgerNav: false
         }
-    },
+    }
 }
 </script>
 
