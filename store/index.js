@@ -1,11 +1,15 @@
 export const state = () => ({
-    attendees: 0,
-    menu: []
+    attendees: null,
+    unplannedRecipes: [],
+    menu: null
   })
   
   export const mutations = {
-    add(state, recipe) {
-      state.menu.push(recipe);
+    addToUnplannedRecipes(state, recipe){
+        state.unplannedRecipes.push(recipe);
+    },
+    initializeMenu(state, menu){
+        state.menu = menu;
     },
     setAttendees(state, attendees){
         state.attendees = attendees;

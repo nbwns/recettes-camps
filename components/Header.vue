@@ -1,6 +1,6 @@
 <template>
-  <section class="hero">
-            <div class="hero-body" :class="className">
+  <section class="hero" :class="className">
+            <div class="hero-body" >
                 <div class="container">
                     <nav class="level">
                         <div class="level-left">
@@ -12,9 +12,8 @@
                         </div>
                         <div class="level-right">
                             
-                                <button class="button">Mon menu de camp
-                                    <span class="tag ml-2">{{menu.length}}</span>
-                                </button>
+                                <nuxt-link class="button" to="/menu">Mon menu de camp</nuxt-link>
+                                
                             
                         </div>
                     </nav>
@@ -25,7 +24,12 @@
 
 <script>
 export default {
-    props: ['className']
+    props: ['className'],
+    computed: {
+        menu () {
+            return this.$store.state.menu || []
+        }
+    },
 }
 </script>
 

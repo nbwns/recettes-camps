@@ -1,31 +1,12 @@
 <template>
     <div>
-        <section class="hero">
-            <div class="hero-body">
-                <div class="container">
-                    <nav class="level">
-                        <div class="level-left">
-                        <div class="level-item">
-                            <div class="container">
-                                <nuxt-link to="/">&lt; Retour</nuxt-link>
-                                <h1 class="title pt-2">
-                                {{recette.nom}}
-                                </h1>
-                            </div>
-                        </div>
-                        </div>
-                        <div class="level-right">
-                            
-                                <button class="button">Mon menu de camp
-                                    <span class="tag ml-2">{{menu.length}}</span>
-                                </button>
-                            
-                        </div>
-                    </nav>
-                </div>
-            </div>
-        </section>
-
+        <Header>
+            <nuxt-link to="/">&lt; Retour</nuxt-link>
+            <h1 class="title is-1 pt-2">
+            {{recette.nom}}
+            </h1>
+        </Header>
+        
         <div class="container">  
             <div class="columns" v-if="recette.description">
                 <div class="column">
@@ -53,7 +34,28 @@
                 </div>
                 <div class="column is-mobile">
                     <div class="buttons">
-                        <button class="button is-primary" @click="addToMenu(recette)">📝 Ajouter au menu</button>
+                        <!--<div class="dropdown" :class="{'is-active': menuButton}">
+                            <div class="dropdown-trigger">
+                                <button class="button is-primary" aria-haspopup="true" aria-controls="dropdown-menu2" @click="menuButton = !menuButton">
+                                <span>📝 Ajouter au menu</span>
+                                <span class="icon is-small">
+                                    <i class="fas fa-angle-down" aria-hidden="true"></i>
+                                </span>
+                                </button>
+                            </div>
+                            <div class="dropdown-menu" id="dropdown-menu2" role="menu">
+                                <div class="dropdown-content">
+                                    <div class="dropdown-item" v-for="(d,index) in menu" :key="index">
+                                        <p>
+                                            Jour {{index+1}} 
+                                            <button class="button is-small" @click="addToMenu(recette, index, 'am')">Midi</button> 
+                                            <button class="button is-small" @click="addToMenu(recette, index, 'pm')">Soir</button>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>-->
+                        <button class="button is-primary" @click="addToUnplannedRecipes(recette)">📝 Ajouter au menu</button>
                         <button class="button">✨ Personnaliser</button>
                         <button class="button">🖨️ Imprimer</button>
                     </div>
@@ -126,7 +128,8 @@ export default {
         return {
             recette: null,
             plates: 0,
-            modal: false
+            modal: false,
+            menuButton: false
         }
     },
     computed: {
@@ -135,15 +138,18 @@ export default {
         },
         plateRatio(){
             return this.plates / this.recette.nombreDePersonnes;
-        },
-        menu () {
-            return this.$store.state.menu || []
         }
     },
     methods:{
-      addToMenu(recette){
-          this.$store.commit('add', recette);
+      addToUnplannedRecipes(recette){
+          this.$store.commit('addToUnplannedRecipes', recette);
       }
+      /*,
+      addToMenu(recette, day, period){
+          console.log(day,period)
+          console.log(this.$store.state.menu[day][period])
+          this.$store.commit('add', {recipe: recette, day: day, period: period});
+      }*/
     },
     asyncData({ params, error, payload }){
         console.log(payload);

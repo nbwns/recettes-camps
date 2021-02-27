@@ -1,16 +1,12 @@
 <template>
   
 <div>
-    <section class="hero is-primary">
-        <div class="hero-body">
-          <div class="container">
-            <h1 class="title">
-              Ajouter une recette
-            </h1>
-          </div>
-        </div>
-      </section>
-
+    <Header>
+        <h1 class="title is-1">
+            Ajouter une recette
+        </h1>
+    </Header>
+ 
        <div class="container" v-if="ajoutee">
         <div class="columns">
             <div class="column">
@@ -122,7 +118,12 @@
 
 <script>
 import axios from "axios"
+import Header from '~/components/Header'
+
 export default {
+    components: {
+      Header
+    },
      data () {
         return {
             recette: {

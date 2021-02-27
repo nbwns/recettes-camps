@@ -1,18 +1,14 @@
 <template>
   <div class="page-wrapper">
-      <section class="hero is-primary">
-        <div class="hero-body">
-          <div class="container">
-            <h1 class="title">
+      <Header className="is-primary">
+            <h1 class="title is-1">
               Camps zéro déchet
             </h1>
-            <h2 class="subtitle">
+            <h2 class="subtitle mt-1">
               Fiches recettes et création de menus
             </h2>
-          </div>
-        </div>
-      </section>
-
+      </Header>
+      
       <div class="container mt-6" v-show="loading">
         ça arrive...
       </div>
@@ -57,17 +53,17 @@
 
 <script>
 import axios from "axios"
+import Header from '~/components/Header'
+
 export default {
+  components: {
+      Header
+    },
      data () {
         return {
             recettes: [],
             loading: true
         }
-    },
-    methods:{
-      addToMenu(recette){
-          this.$store.commit('add', recette);
-      }
     },
     mounted(){
         return axios({
