@@ -1,3 +1,8 @@
+import VuexPersistence from 'vuex-persist'
+
+
+  
+
 export const state = () => ({
     attendees: null,
     unplannedRecipes: [],
@@ -15,4 +20,5 @@ export const state = () => ({
         state.attendees = attendees;
     }
   }
+
   

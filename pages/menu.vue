@@ -107,6 +107,14 @@
                 </div>
               </div>
           </div>
+          <div>
+            <div v-for="days in menu" :key="days.date">
+                <h2>{{days.date}}</h2>
+                <ul>
+                  <li v-for="r in days.recipes" :key="r.slug">{{r.nom}}</li>
+                </ul>
+            </div>
+          </div>
         </div>
       </div>
 
