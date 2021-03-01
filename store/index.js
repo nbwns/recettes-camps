@@ -1,8 +1,5 @@
 import VuexPersistence from 'vuex-persist'
 
-
-  
-
 export const state = () => ({
     attendees: null,
     unplannedRecipes: [],
@@ -13,8 +10,11 @@ export const state = () => ({
     addToUnplannedRecipes(state, recipe){
         state.unplannedRecipes.push(recipe);
     },
-    initializeMenu(state, menu){
+    updateMenu(state, menu){
         state.menu = menu;
+    },
+    updateDay(state, {value, key}){
+        state.menu[key] = value;
     },
     setAttendees(state, attendees){
         state.attendees = attendees;

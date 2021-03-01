@@ -29,26 +29,8 @@
       <div class="container">
         <h2 class="title is-3">Menu de camp</h2>
         <div class="columns">
-          <div class="column" v-if="menu">
-              <div class="card mb-2" v-for="day in menu" :key="day.date">
-                  <header class="card-header">
-                    <p class="card-header-title">
-                      {{day.date}}
-                    </p>
-                  </header>
-                  <div class="card-content">
-                      <div class="slot">
-                          <draggable
-                          :list="day.recipes"
-                          group="menu"
-                        >
-                            <span class="tag is-large m-2 grabbable" v-for="r in day.recipes" :key="r.slug">
-                                <i class="fa fa-ellipsis-v is-size-7 mr-2"></i> {{r.nom}}
-                            </span>
-                          </draggable>
-                      </div>
-                  </div>
-                </div>
+          <div class="column" v-if="menu && menu">
+              <MenuDay v-for="(recipes, day) in menu" :key="day" :day="day" :recipes="recipes"  />
           </div>
           <div class="column" v-else>
               <article class="message is-warning">
@@ -107,14 +89,7 @@
                 </div>
               </div>
           </div>
-          <div>
-            <div v-for="days in menu" :key="days.date">
-                <h2>{{days.date}}</h2>
-                <ul>
-                  <li v-for="r in days.recipes" :key="r.slug">{{r.nom}}</li>
-                </ul>
-            </div>
-          </div>
+          
         </div>
       </div>
 
@@ -123,12 +98,14 @@
 
 <script>
 import Header from '~/components/Header'
+import MenuDay from '~/components/MenuDay'
 import moment from 'moment'
 import draggable from "vuedraggable";
 
 export default {
     components: {
       Header,
+      MenuDay,
       draggable
     },
     data() {
@@ -139,19 +116,17 @@ export default {
       }
     },
     computed:{
-      unplannedRecipes(){
-        return this.$store.state.unplannedRecipes || []
+      unplannedRecipes:{
+        get(){
+          return this.$store.state.unplannedRecipes || []
+        },
+        set(value){
+          console.log("unplannedRecipes", value)
+        }
       },
-      menu(){
-        return this.$store.state.menu;
-      },
-      myList: {
+      menu: {
         get() {
             return this.$store.state.menu
-        },
-        set(value) {
-            console.log(value)
-            //this.$store.commit('updateList', value)
         }
     }
     },
@@ -161,33 +136,17 @@ export default {
         let startMoment = moment(this.start);
         let endMoment = moment(this.end);
         let diff = endMoment.diff(startMoment, 'days');
-        let menu= [];
-        menu.push(
-              {
-                 date: startMoment.format('DD/MM/YYYY'), 
-                recipes:[]
-              }
-            )
+        let menu= {};
+        menu[startMoment.format('DD/MM/YYYY')] = this.unplannedRecipes;
         for(let i = 0; i < diff; i++){
-            menu.push(
-              {
-                 date: startMoment.add(1, 'days').format('DD/MM/YYYY'), 
-                recipes:[]
-              }
-            )
-
+          menu[startMoment.add(1, 'days').format('DD/MM/YYYY')] = [];
         }
-        console.log(menu);
-        this.$store.commit('initializeMenu', menu);
+        this.$store.commit('updateMenu', menu);
       }
     }
 }
 </script>
 
 <style scoped>
-  .slot{
-    border: 1px gray dashed;
-    min-height: 48px;
-    border-radius: 2px;
-  }
+
 </style>
