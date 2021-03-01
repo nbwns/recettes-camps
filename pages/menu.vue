@@ -4,9 +4,13 @@
           <h1 class="title is-1">Mon menu de camp</h1>
       </Header>
       <div class="container">
-        <h2 class="title is-3">Recettes disponibles</h2>
         <div class="columns">
-          <div class="column" v-if="unplannedRecipes.length > 0">
+          <div class="column">
+            <div class="level">
+              <h2 class="title is-3">Recettes disponibles</h2> 
+              <button class="button is-small" title="Vider la liste des recettes disponibles" @click="unplannedRecipes = []">🗑️</button>
+            </div>
+            <div class="container" v-if="unplannedRecipes.length > 0">
               <draggable
                 v-model="unplannedRecipes" group="menu"  
               >
@@ -14,25 +18,24 @@
                   <i class="fa fa-ellipsis-v is-size-7 mr-2"></i> {{r.nom}}
                 </span>
               </draggable>
-              
-          </div>
-          <div class="column" v-else>
+            </div>
+            <div class="container" v-else>
               <article class="message is-warning">
                 <div class="message-body">
                   Tu n'as aucune recette à placer dans ton menu. Pour ajouter une recette ici, clique sur "📝 Ajouter au menu" dans les recettes que tu veux planifier.
                 </div>
               </article>
+            </div>
           </div>
+          <div class="column">
+            <div class="level">
+          <h2 class="title is-3">Menu de camp</h2>
+          <button class="button is-small" title="Recommencer une nouveau menu" @click="menu = null">🔄</button>
         </div>
-      </div>
-
-      <div class="container">
-        <h2 class="title is-3">Menu de camp</h2>
-        <div class="columns">
-          <div class="column" v-if="menu && menu">
+          <div class="container" v-if="menu">
               <MenuDay v-for="(recipes, day) in menu" :key="day" :day="day" :recipes="recipes"  />
           </div>
-          <div class="column" v-else>
+          <div class="container" v-else>
               <article class="message is-warning">
                 <div class="message-body">
                   Tu dois d'abord configurer ton menu. Sélectionne le nombre de couverts et les dates de ton camp.
@@ -89,8 +92,14 @@
                 </div>
               </div>
           </div>
-          
+          </div>
         </div>
+        
+          
+      </div>
+
+      <div class="container">
+        
       </div>
 
   </div>
@@ -121,12 +130,15 @@ export default {
           return this.$store.state.unplannedRecipes || []
         },
         set(value){
-          console.log("unplannedRecipes", value)
+          this.$store.commit('updateUnplannedRecipes', value);
         }
       },
       menu: {
         get() {
             return this.$store.state.menu
+        },
+        set(value){
+          this.$store.commit('updateMenu', value);
         }
     }
     },
@@ -137,7 +149,7 @@ export default {
         let endMoment = moment(this.end);
         let diff = endMoment.diff(startMoment, 'days');
         let menu= {};
-        menu[startMoment.format('DD/MM/YYYY')] = this.unplannedRecipes;
+        menu[startMoment.format('DD/MM/YYYY')] = [];
         for(let i = 0; i < diff; i++){
           menu[startMoment.add(1, 'days').format('DD/MM/YYYY')] = [];
         }

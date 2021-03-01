@@ -10,6 +10,9 @@ export const state = () => ({
     addToUnplannedRecipes(state, recipe){
         state.unplannedRecipes.push(recipe);
     },
+    updateUnplannedRecipes(state, value){
+        state.unplannedRecipes = value;
+    },
     updateMenu(state, menu){
         state.menu = menu;
     },
