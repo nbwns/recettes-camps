@@ -48,7 +48,8 @@ export default {
     // https://go.nuxtjs.dev/pwa
     '@nuxtjs/pwa',
     // https://go.nuxtjs.dev/content
-    '@nuxt/content'
+    '@nuxt/content',
+    '@nuxtjs/toast',
   ],
 
   // Axios module configuration (https://go.nuxtjs.dev/config-axios)
@@ -56,6 +57,10 @@ export default {
 
   // Content module configuration (https://go.nuxtjs.dev/config-content)
   content: {},
+
+  toast: {
+    position: 'bottom-center'
+  },
 
   // Build Configuration (https://go.nuxtjs.dev/config-build)
   build: {

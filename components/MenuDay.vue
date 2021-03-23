@@ -11,9 +11,10 @@
                     <draggable
                     v-model="menuDay"
                     group="menu"
+                    dragClass="dragged"
                 >
                     <span class="tag is-large m-2 grabbable" v-for="r in menuDay" :key="r.slug">
-                        <i class="fa fa-ellipsis-v is-size-7 mr-2"></i> {{r.nom}}
+                        <i class="fa fa-ellipsis-v is-size-7"></i><i class="fa fa-ellipsis-v is-size-7 mr-2"></i> {{r.nom}}
                     </span>
                     </draggable>
                 </div>

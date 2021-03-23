@@ -143,13 +143,12 @@ export default {
     methods:{
       addToUnplannedRecipes(recette){
           this.$store.commit('addToUnplannedRecipes', recette);
+          this.$toast.show('👍 Recette ajoutée au menu', { 
+                theme: "bubble", 
+                position: "bottom-center", 
+                duration : 1550
+            });
       }
-      /*,
-      addToMenu(recette, day, period){
-          console.log(day,period)
-          console.log(this.$store.state.menu[day][period])
-          this.$store.commit('add', {recipe: recette, day: day, period: period});
-      }*/
     },
     asyncData({ params, error, payload }){
         console.log(payload);

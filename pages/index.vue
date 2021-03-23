@@ -39,14 +39,6 @@
             </div>
         </div>
       </div>
-
-      <footer class="footer">
-        <div class="content has-text-centered">
-          <p>
-            Outil cuisiné par <a href="https://www.fristouille.org">Fristouille</a>
-          </p>
-        </div>
-      </footer>
       <nuxt-link to="ajouter"><div class="fab"> + </div></nuxt-link>
     </div>
 </template>

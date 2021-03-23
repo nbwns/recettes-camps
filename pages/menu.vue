@@ -10,17 +10,19 @@
               <h2 class="title is-3">Recettes disponibles</h2> 
               <button class="button is-small" title="Vider la liste des recettes disponibles" @click="unplannedRecipes = []">🗑️</button>
             </div>
-            <div class="container" v-if="unplannedRecipes.length > 0">
-              <draggable
-                v-model="unplannedRecipes" group="menu"  
-              >
-                <span class="tag is-large m-2 grabbable" v-for="r in unplannedRecipes" :key="r.slug">
-                  <i class="fa fa-ellipsis-v is-size-7 mr-2"></i> {{r.nom}}
-                </span>
-              </draggable>
+            <div class="container">
+              <div class="dashed-slot">
+                <draggable
+                  v-model="unplannedRecipes" group="menu" dragClass="dragged"  
+                >
+                  <span class="tag is-large m-2 grabbable" v-for="r in unplannedRecipes" :key="r.slug">
+                    <i class="fa fa-ellipsis-v is-size-7"></i><i class="fa fa-ellipsis-v is-size-7 mr-2"></i> {{r.nom}}
+                  </span>
+                </draggable>
+              </div>
             </div>
-            <div class="container" v-else>
-              <article class="message is-warning">
+            <div class="container" v-if="unplannedRecipes.length == 0">
+              <article class="message is-warning mt-5">
                 <div class="message-body">
                   Tu n'as aucune recette à placer dans ton menu. Pour ajouter une recette ici, clique sur "📝 Ajouter au menu" dans les recettes que tu veux planifier.
                 </div>
@@ -99,7 +101,7 @@
       </div>
 
       <div class="container">
-        
+        <menu-price/>
       </div>
 
   </div>
@@ -108,6 +110,7 @@
 <script>
 import Header from '~/components/Header'
 import MenuDay from '~/components/MenuDay'
+import MenuPrice from '~/components/MenuPrice'
 import moment from 'moment'
 import draggable from "vuedraggable";
 
@@ -115,6 +118,7 @@ export default {
     components: {
       Header,
       MenuDay,
+      MenuPrice,
       draggable
     },
     data() {
@@ -159,6 +163,15 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
+.dragged{
+  rotate: -10deg;
+}
 
+.dashed-slot{
+  border: 1px gray solid;
+  min-height: 150px;
+  border-radius: 4px;
+
+}
 </style>
