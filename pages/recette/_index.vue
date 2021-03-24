@@ -34,27 +34,6 @@
                 </div>
                 <div class="column is-mobile">
                     <div class="buttons">
-                        <!--<div class="dropdown" :class="{'is-active': menuButton}">
-                            <div class="dropdown-trigger">
-                                <button class="button is-primary" aria-haspopup="true" aria-controls="dropdown-menu2" @click="menuButton = !menuButton">
-                                <span>📝 Ajouter au menu</span>
-                                <span class="icon is-small">
-                                    <i class="fas fa-angle-down" aria-hidden="true"></i>
-                                </span>
-                                </button>
-                            </div>
-                            <div class="dropdown-menu" id="dropdown-menu2" role="menu">
-                                <div class="dropdown-content">
-                                    <div class="dropdown-item" v-for="(d,index) in menu" :key="index">
-                                        <p>
-                                            Jour {{index+1}} 
-                                            <button class="button is-small" @click="addToMenu(recette, index, 'am')">Midi</button> 
-                                            <button class="button is-small" @click="addToMenu(recette, index, 'pm')">Soir</button>
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>-->
                         <button class="button is-primary" @click="addToUnplannedRecipes(recette)">📝 Ajouter au menu</button>
                         <button class="button">✨ Personnaliser</button>
                         <button class="button">🖨️ Imprimer</button>
@@ -92,6 +71,13 @@
                     </div>
                 </div>
                 <div class="column">
+                    <h2 class="is-size-4">Indices assiette écologique</h2>
+                    <div class="block">
+                        <div class="mb-2">Céréales <progress class="ml-5 progress is-warning is-small" :value="recette.proportionCereales" max="1"></progress></div>
+                        <div class="mb-2">Légumineuses <progress class="ml-5 progress is-success is-small" :value="recette.proportionLegumineuses" max="1"></progress></div>
+                        <div class="mb-2">Légumes <progress class="ml-5 progress is-danger is-small" :value="recette.proportionLegumes" max="1"></progress></div>
+                        <div class="mb-2">Autre <progress class="ml-5 progress is-info is-small" :value="recette.proportionAutre" max="1"></progress></div>
+                    </div>
                     <h2 class="is-size-4">Préparation</h2>
                     <div class="pl-5" v-html="procedure"></div>
                 </div>
@@ -175,6 +161,10 @@ export default {
                             prix
                         }
                         prix
+                        proportionLegumineuses
+                        proportionLegumes
+                        proportionCereales
+                        proportionAutre
                     }
                 }`,
                 },
