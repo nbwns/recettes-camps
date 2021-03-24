@@ -40,6 +40,7 @@ export default {
                 return this.$store.state.menu[this.day]
             },
             set(value) {
+                console.log("menu day changes")
                 this.$store.commit('updateDay', {
                     value,
                     key: this.day,

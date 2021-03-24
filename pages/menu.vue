@@ -142,6 +142,7 @@ export default {
             return this.$store.state.menu
         },
         set(value){
+          console.log("menu state changes");
           this.$store.commit('updateMenu', value);
         }
     }

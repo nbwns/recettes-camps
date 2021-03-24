@@ -3,7 +3,8 @@ import VuexPersistence from 'vuex-persist'
 export const state = () => ({
     attendees: null,
     unplannedRecipes: [],
-    menu: null
+    menu: null,
+    trigger: 0
   })
   
   export const mutations = {
@@ -18,6 +19,7 @@ export const state = () => ({
     },
     updateDay(state, {value, key}){
         state.menu[key] = value;
+        state.trigger = value;
     },
     setAttendees(state, attendees){
         state.attendees = attendees;

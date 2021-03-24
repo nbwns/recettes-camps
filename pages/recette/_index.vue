@@ -145,7 +145,7 @@ export default {
           this.$store.commit('addToUnplannedRecipes', recette);
           this.$toast.show('👍 Recette ajoutée au menu', { 
                 theme: "bubble", 
-                position: "bottom-center", 
+                position: "top-center", 
                 duration : 1550
             });
       }
