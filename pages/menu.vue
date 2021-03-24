@@ -31,13 +31,13 @@
           </div>
           <div class="column">
             <div class="level">
-          <h2 class="title is-3">Menu de camp</h2>
-          <button class="button is-small" title="Recommencer une nouveau menu" @click="menu = null">🔄</button>
-        </div>
-          <div class="container" v-if="menu">
+              <h2 class="title is-3">Menu de camp</h2>
+              <button class="button is-small" title="Recommencer une nouveau menu" @click="menu = null">🔄</button>
+            </div>
+            <div class="container" v-if="menu">
               <MenuDay v-for="(recipes, day) in menu" :key="day" :day="day" :recipes="recipes"  />
-          </div>
-          <div class="container" v-else>
+            </div>
+            <div class="container" v-else>
               <article class="message is-warning">
                 <div class="message-body">
                   Tu dois d'abord configurer ton menu. Sélectionne le nombre de couverts et les dates de ton camp.
@@ -95,15 +95,14 @@
               </div>
           </div>
           </div>
+          <div class="column">
+            <div class="level">
+              <h2 class="title is-3">Budget</h2>
+            </div>
+            <menu-price/>
+          </div>
         </div>
-        
-          
       </div>
-
-      <div class="container">
-        <menu-price/>
-      </div>
-
   </div>
 </template>
 

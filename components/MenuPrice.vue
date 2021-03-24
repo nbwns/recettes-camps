@@ -1,6 +1,17 @@
 <template>
   <div>
-      <strong>Budget pour tout le camp</strong> {{totalBudget}}
+      <p>
+        <strong>Budget pour tout le camp</strong> {{totalBudget.toFixed()}} €
+      </p>
+      <p>
+        <strong>Budget par personne pour tout le camp</strong> {{budgetPerServing.toFixed()}} €
+      </p>
+      <p>
+        <strong>Budget moyen par jour </strong> {{avgPerDay.toFixed()}} €
+      </p>
+      <p>
+        <strong>Budget moyen par personne par jour </strong> {{avgPerServingPerDay.toFixed()}} €
+      </p>
   </div>
 </template>
 
@@ -9,7 +20,10 @@ import BudgetCalculator from '~/assets/classes/BudgetCalculator'
 export default {
     data(){
         return {
-            totalBudget: 0
+            totalBudget: 0,
+            budgetPerServing: 0,
+            avgPerDay: 0,
+            avgPerServingPerDay: 0
         }
     },
     computed: {
@@ -17,15 +31,19 @@ export default {
             return this.$store.state.menu;
         }
     },
-    created(){
-        let bc = new BudgetCalculator(this.menu,this.$store.state.attendees);
-        this.totalBudget =  bc.getTotalBudget();
-        this.$store.watch((state) => state.trigger, (oldValue, newValue) => {
-            console.log('search string is changing')
-            console.log(oldValue)
-            console.log(this.$store.state.menu)
-            let bc = new BudgetCalculator(this.$store.state.menu,this.$store.state.attendees);
+    methods:{
+        calculateBudget(){
+            let bc = new BudgetCalculator(this.menu,this.$store.state.attendees);
             this.totalBudget =  bc.getTotalBudget();
+            this.budgetPerServing = bc.getBudgetPerServing();
+            this.avgPerDay = bc.getAverageBudgetPerDay();
+            this.avgPerServingPerDay = bc.getAverageBudgetPerServingPerDay();
+        }
+    },
+    created(){
+        this.calculateBudget();
+        this.$store.watch((state) => state.trigger, (oldValue, newValue) => {
+            this.calculateBudget();
         })
     }
 }
