@@ -14,11 +14,11 @@
                             </a>
                           </div>
                         <div class="navbar-menu" :class="{'is-active': burgerNav}">
-                                <div class="navbar-end">
-                                <nuxt-link class="navbar-item" to="/">Recettes</nuxt-link>
-
-                                <nuxt-link class="navbar-item" to="/menu">Menu de camp</nuxt-link>
-                                </div>
+                            <div class="navbar-end">
+                                <nuxt-link class="navbar-item" to="/">Les recettes</nuxt-link>
+                                <nuxt-link class="navbar-item" to="/menu">Mon menu de camp</nuxt-link>
+                                <nuxt-link class="navbar-item" to="/shoppinglist">Ma liste de courses</nuxt-link>
+                            </div>
                         </div>
 
                     </nav>

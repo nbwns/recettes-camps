@@ -6,8 +6,25 @@
             {{recette.nom}}
             </h1>
         </Header>
+
+        
         
         <div class="container">  
+            <nav class="level">
+                <div class="level-left">
+                </div>
+                <div class="level-right">
+                    <div class="level-item">
+                        <div class="buttons">
+                            <button class="button is-primary" @click="addToUnplannedRecipes(recette)">📝 Ajouter au menu</button>
+                            <!--<button class="button">✨ Personnaliser</button>-->
+                            <button class="button" @click="print()">🖨️ Imprimer</button>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+            
+
             <div class="columns" v-if="recette.description">
                 <div class="column">
                     <article class="message">
@@ -19,7 +36,16 @@
             </div>  
             <div class="columns">
                 <div class="column is-half">
-                     <div class="field is-horizontal">
+                     
+                </div>
+                
+            </div>
+           
+            <div class="columns">
+                <div class="column">
+                    <h2 class="is-size-4">Ingrédients</h2>
+                    
+                    <div class="field is-horizontal">
                         <div class="field-label ">
                             <label class="label">Couverts</label>
                         </div>
@@ -31,20 +57,7 @@
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="column is-mobile">
-                    <div class="buttons">
-                        <button class="button is-primary" @click="addToUnplannedRecipes(recette)">📝 Ajouter au menu</button>
-                        <button class="button">✨ Personnaliser</button>
-                        <button class="button">🖨️ Imprimer</button>
-                    </div>
-                </div>
-            </div>
-           
-            <div class="columns">
-                <div class="column">
-                    <h2 class="is-size-4">Ingrédients</h2>
-                    
+                   
                     <div class="columns m-0 p-0 is-mobile">
                         <div class="column">
                             <strong>Quantité</strong>
@@ -71,6 +84,8 @@
                     </div>
                 </div>
                 <div class="column">
+                    <h2 class="is-size-4">Préparation</h2>
+                    <div class="pl-5" v-html="procedure"></div>
                     <h2 class="is-size-4">Indices assiette écologique</h2>
                     <div class="block">
                         <div class="mb-2">Céréales <progress class="ml-5 progress is-warning is-small" :value="recette.proportionCereales" max="1"></progress></div>
@@ -78,8 +93,6 @@
                         <div class="mb-2">Légumes <progress class="ml-5 progress is-danger is-small" :value="recette.proportionLegumes" max="1"></progress></div>
                         <div class="mb-2">Autre <progress class="ml-5 progress is-info is-small" :value="recette.proportionAutre" max="1"></progress></div>
                     </div>
-                    <h2 class="is-size-4">Préparation</h2>
-                    <div class="pl-5" v-html="procedure"></div>
                 </div>
             </div>            
         </div>
@@ -134,6 +147,9 @@ export default {
                 position: "top-center", 
                 duration : 1550
             });
+      },
+      print(){
+          window.print();
       }
     },
     asyncData({ params, error, payload }){

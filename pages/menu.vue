@@ -7,7 +7,7 @@
         <div class="columns">
           <div class="column">
             <div class="level">
-              <h2 class="title is-3">Recettes disponibles</h2> 
+              <h2 class="title is-3">Recettes à planifier</h2> 
               <button class="button is-small" title="Vider la liste des recettes disponibles" @click="unplannedRecipes = []">🗑️</button>
             </div>
             <div class="container">
@@ -31,8 +31,8 @@
           </div>
           <div class="column">
             <div class="level">
-              <h2 class="title is-3">Menu de camp</h2>
-              <button class="button is-small" title="Recommencer une nouveau menu" @click="menu = null">🔄</button>
+              <h2 class="title is-3">Calendrier</h2>
+              <button class="button is-small" title="Recommencer" @click="menu = null">🔄</button>
             </div>
             <div class="container" v-if="menu">
               <MenuDay v-for="(recipes, day) in menu" :key="day" :day="day" :recipes="recipes"  />
@@ -40,7 +40,7 @@
             <div class="container" v-else>
               <article class="message is-warning">
                 <div class="message-body">
-                  Tu dois d'abord configurer ton menu. Sélectionne le nombre de couverts et les dates de ton camp.
+                  Sélectionne d'abord le nombre de couverts et les dates de ton camp.
                 </div>
               </article>
               <div class="field is-horizontal">
