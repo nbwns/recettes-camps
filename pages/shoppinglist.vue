@@ -1,15 +1,15 @@
 <template>
   <div>
         <Header>
-            <h1 class="title is-1">Liste de courses</h1>
+            <h1 class="title is-1">Ma liste de courses</h1>
         </Header>
         <div class="container">  
             <div class="columns">
                 <div class="column">
                     <div v-for="(value, ingredient) in shoppingList" :key="ingredient">
-                        {{ingredient}} : {{value.totalQuantity}}
-                        <ul class="ml-5">
-                            <li v-for="r in value.recipes" :key="r.name">{{r.name}} {{r.quantity}}{{r.unit}}</li>
+                        <i class="fas fa-angle-right clickable" @click="showLine(ingredient, $event)"></i> {{ingredient}} : {{value.totalQuantity.toFixed(2)}} {{value.unit}}
+                        <ul class="ml-5 hidden" :ref="ingredient">
+                            <li v-for="r in value.recipes" :key="r.name">{{r.name}} {{r.quantity.toFixed(1)}} {{r.unit}}</li>
                         </ul>
                     </div>
                 </div>
@@ -27,6 +27,12 @@ export default {
             shoppingList: {}
         }
     },
+    methods:{
+        showLine(line, event){
+            this.$refs[line][0].classList.toggle("hidden");  
+            event.target.classList.toggle("expanded");        
+        }
+    },
     mounted(){
         let sl = new ShoppingList(this.$store.state.menu, this.$store.state.attendees);
         this.shoppingList = sl.generate();
@@ -36,5 +42,16 @@ export default {
 </script>
 
 <style>
+.hidden{
+    display:none;
+}
 
+.fa-angle-right{
+    transition: all 0.3s;
+}
+
+.expanded{
+    transform: rotate(90deg);
+    transition: all 0.3s;
+}
 </style>

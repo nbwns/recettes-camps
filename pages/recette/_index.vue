@@ -175,8 +175,10 @@ export default {
                             unites
                             nomIngredient
                             prix
+                            mesure
                         }
                         prix
+                        slug
                         proportionLegumineuses
                         proportionLegumes
                         proportionCereales

@@ -33,11 +33,13 @@ export default {
     },
     methods:{
         calculateBudget(){
-            let bc = new BudgetCalculator(this.menu,this.$store.state.attendees);
-            this.totalBudget =  bc.getTotalBudget();
-            this.budgetPerServing = bc.getBudgetPerServing();
-            this.avgPerDay = bc.getAverageBudgetPerDay();
-            this.avgPerServingPerDay = bc.getAverageBudgetPerServingPerDay();
+            if(this.menu){
+                let bc = new BudgetCalculator(this.menu,this.$store.state.attendees);
+                this.totalBudget =  bc.getTotalBudget();
+                this.budgetPerServing = bc.getBudgetPerServing();
+                this.avgPerDay = bc.getAverageBudgetPerDay();
+                this.avgPerServingPerDay = bc.getAverageBudgetPerServingPerDay();
+            }
         }
     },
     created(){

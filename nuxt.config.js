@@ -93,14 +93,19 @@ export default {
                   unites
                   nomIngredient
                   prix
+                  mesure
               }
               prix
               slug
+              prix
+              proportionLegumineuses
+              proportionLegumes
+              proportionCereales
+              proportionAutre
             }
           }`,
         },
       }).then((result) => {
-      console.log("plop")
         return result.data.data.recettes.map(recette => {
           return {
             route: 'recette/' + recette.slug,
