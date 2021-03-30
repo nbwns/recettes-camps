@@ -3,14 +3,44 @@
         <Header>
             <h1 class="title is-1">Ma liste de courses</h1>
         </Header>
-        <div class="container">  
+        <div class="container"> 
+            <nav class="level">
+                <div class="level-left">
+                </div>
+                <div class="level-right">
+                    <div class="level-item">
+                        <div class="buttons">
+                            <!--<toggle-button @change="viewDetails()"/> Voir toutes les recettes par ingrédient-->
+                            <button class="button" @click="print()">🖨️ Imprimer</button>
+                        </div>
+                    </div>
+                </div>
+            </nav> 
             <div class="columns">
-                <div class="column">
-                    <div v-for="(value, ingredient) in shoppingList" :key="ingredient">
-                        <i class="fas fa-angle-right clickable" @click="showLine(ingredient, $event)"></i> {{ingredient}} : {{value.totalQuantity.toFixed(2)}} {{value.unit}}
-                        <ul class="ml-5 hidden" :ref="ingredient">
-                            <li v-for="r in value.recipes" :key="r.name">{{r.name}} {{r.quantity.toFixed(1)}} {{r.unit}}</li>
-                        </ul>
+                <div class="column ml-5">
+                    <div v-for="(item, index) in shoppingList" :key="item.ingredient">
+                        <div class="clickable is-size-5 columns mb-0" @click="item.visible = !item.visible" :class="{'has-background-info-light': index % 2 == 1}">
+                            <div class="column">
+                                <i class="fas fa-angle-right" :class="{'expanded': item.visible}" ></i> 
+                                <span>{{item.ingredient}}</span>
+                            </div>
+                            <div class="column">
+                                 <span>{{parseFloat(item.totalQuantity.toFixed(2))}} {{item.unit}}</span>
+                            </div>
+                        </div>
+                        <div v-if="item.visible">
+                            <div class="columns ml-5 mb-0" v-for="r in item.recipes" :key="r.name">
+                                <div class="column">
+                                    {{r.name}}
+                                </div>
+                                <div class="column">
+                                    {{parseFloat(r.quantity.toFixed(1))}} {{r.unit}}
+                                </div>
+                            </div>
+                        </div>
+                        <!--<ul class="ml-5" v-if="item.visible">
+                            <li v-for="r in item.recipes" :key="r.name">{{r.name}} {{parseFloat(r.quantity.toFixed(1))}} {{r.unit}}</li>
+                        </ul>-->
                     </div>
                 </div>
             </div>
@@ -20,17 +50,26 @@
 
 <script>
 import ShoppingList from '~/assets/classes/ShoppingList'
-
+import ToggleButton from 'vue-js-toggle-button'
 export default {
+    components: {
+        ToggleButton
+    },
     data(){
         return {
-            shoppingList: {}
+            shoppingList: {},
+            unfold: false
         }
     },
     methods:{
-        showLine(line, event){
-            this.$refs[line][0].classList.toggle("hidden");  
-            event.target.classList.toggle("expanded");        
+        print(){
+            window.print()
+        },
+        viewDetails(){
+            this.unfold = !this.unfold
+            this.shoppingList.forEach(item => {
+                item.visible = this.unfold;
+            });
         }
     },
     mounted(){
@@ -42,10 +81,6 @@ export default {
 </script>
 
 <style>
-.hidden{
-    display:none;
-}
-
 .fa-angle-right{
     transition: all 0.3s;
 }

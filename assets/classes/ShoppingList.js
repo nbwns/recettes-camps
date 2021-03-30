@@ -9,7 +9,7 @@ class ShoppingList{
     generate(){
         this.#ingredients = {};
         if(this.menu && this.servings > 0){
-            let allRecipes = Object.values(this.menu).flat();
+            let allRecipes = Object.values(this.menu).flat().sort((a,b) => (a.nom > b.nom) ? 1 : -1);
             allRecipes.forEach(r => {
                 let ratio = this.servings / r.nombreDePersonnes;
                 console.log(ratio);
@@ -20,7 +20,7 @@ class ShoppingList{
                     let ingredientQty = ((c.quantite / conversionRatio) * ratio);
                     let ingredientUnit = c.mesure[0] === "Masse" ? "kg" : "l";
                     if(!this.#ingredients.hasOwnProperty(ingredient)){
-                        this.#ingredients[ingredient] = {totalQuantity: 0, recipes: [], unit: ingredientUnit}
+                        this.#ingredients[ingredient] = {totalQuantity: 0, recipes: [], unit: ingredientUnit, ingredient: ingredient, visible:false}
                     }
                     //change if unit is different
                     this.#ingredients[ingredient].totalQuantity += ingredientQty;
@@ -29,10 +29,14 @@ class ShoppingList{
                         quantity: c.quantite * ratio,
                         unit: c.unites
                     })
-                })
+                });
             });
+            
+            return Object.values(this.#ingredients).sort((a, b) => (a.ingredient > b.ingredient) ? 1 : -1);
         }
-        return this.#ingredients;
+        else{
+            return [];
+        }
     }
 }
 
