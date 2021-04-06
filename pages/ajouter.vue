@@ -28,10 +28,26 @@
                 </div>
 
                 <div class="field">
+                    <label class="label">Courte description de la recette</label>
+                    <div class="control">
+                        <input class="input" type="text" placeholder="C'est super facile et les animés adorent !" v-model="recette.introduction" required="required">
+                    </div>
+                    <p class="help">Pour donner envie de la consulter</p>
+                </div>
+
+                <div class="field">
                     <label class="label">Auteur</label>
                     <div class="control">
                         <input class="input" type="text" placeholder="97ème de Saint-Glinglin" v-model="recette.auteur" required="required">
                     </div>
+                </div>
+
+                <div class="field">
+                    <label class="label">E-mail de l'auteur</label>
+                    <div class="control">
+                        <input class="input" type="email" placeholder="97saintglinglin@gmail.com" v-model="recette.contactAuteur" required="required">
+                    </div>
+                    <p class="help">Adresse à laquelle on peut vous contacter en cas de questions sur la recette</p>
                 </div>
 
                 <div class="field">
@@ -60,6 +76,7 @@
                         <textarea class="textarea" placeholder="1. Eplucher les pommes de terre" v-model="recette.procedure" required></textarea>
                     </div>
                 </div>
+
                 <div class="field">
                     <label class="label">Ingrédients</label>
                 </div>
@@ -72,23 +89,15 @@
                                     label="nom" 
                                     v-model="compo.ingredient"
                                     @input="ingredient => updateUnit(compo, ingredient.mesure)">
-                                    <!-- <template #search="{attributes, events}">
-                                        <input
-                                        class="vs__search"
-                                        :required="!selected"
-                                        v-bind="attributes"
-                                        v-on="events"
-                                        />
-                                    </template> -->
                                 </v-select>
                             </p>
                         </div>
-                        <div class="field">
+                        <div class="field" v-if="compo.ingredient">
                             <p class="control">
                                 <input class="input" type="number" placeholder="800" v-model="compo.quantite" required>
                             </p>
                         </div>
-                        <div class="field">
+                        <div class="field" v-if="compo.ingredient">
                             <span class="control">
                                 <div class="select" >
                                     <select v-model="compo.unite" v-if="compo.ingredient" required>
@@ -100,11 +109,23 @@
                                 </div>
                             </span>
                         </div>
+                        <div class="field">
+                            <i class="fas fa-trash-alt clickable" @click="removeIngredient(compo.id)"></i>
+                        </div>
                     </div>
                 </div>
                 <div>
                     <button class="button is-fullwidth" @click="addIngredient">Ajouter un ingrédient</button>
                 </div>
+
+                <div class="field">
+                    <label class="label">Remarques</label>
+                    <div class="control">
+                        <textarea class="textarea" placeholder="Vous pouvez réutiliser les restes le lendemain en les transformant en gnocchis" v-model="recette.description"></textarea>
+                    </div>
+                    <p class="help">Pour expliquer comment réutiliser les restes le lendemain, le petit truc spécial à savoir ou toute autre info utile</p>
+                </div>
+
                 <div class="field">
                     <div class="control">
                         <button class="button is-primary" type="submit">Envoyer</button>
@@ -134,9 +155,11 @@ export default {
     },
      data () {
         return {
+            ingredientIndex: 2,
             recette: {
                 nom: null,
                 auteur: null,
+                contactAuteur: null,
                 couverts: null,
                 procedure: null,
                 type: 'Omnivore',
@@ -162,9 +185,10 @@ export default {
     },
     methods:{
         addIngredient() {
+            this.ingredientIndex++;
             this.recette.compositions.push(
                 {
-                    id:2,
+                    id:this.ingredientIndex,
                     quantite: null,
                     unite: 'gr',
                     ingredient: null
@@ -173,6 +197,12 @@ export default {
         },
         updateUnit(compo, mesure){
             compo.unite = (mesure === "Masse" ? "kg" : "l");
+        },
+        removeIngredient(index){
+            let itemIndex = this.recette.compositions.findIndex((e) => e.id === index);
+            if(itemIndex > -1){
+                this.recette.compositions.splice(itemIndex,1)
+            }
         },
         post(){
             if(this.validate()){
@@ -201,7 +231,7 @@ export default {
             method: "post",
             data: {
             query: `{
-                  ingredients {
+                  ingredients(_order_by: "nom") {
                         id
                         nom
                         mesure

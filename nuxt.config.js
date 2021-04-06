@@ -103,6 +103,8 @@ export default {
               proportionLegumes
               proportionCereales
               proportionAutre
+              contactAuteur
+              auteur
             }
           }`,
         },
