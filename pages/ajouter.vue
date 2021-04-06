@@ -6,8 +6,7 @@
             Ajouter une recette
         </h1>
     </Header>
- 
-       <div class="container" v-if="ajoutee">
+    <div class="container" v-if="ajoutee">
         <div class="columns">
             <div class="column">
                 <div class="notification is-primary">
@@ -16,22 +15,22 @@
                 </div>
             </div>
         </div>
-       </div>
-
+    </div>
+    <form v-on:submit.prevent="post">
       <div class="container" v-if="!ajoutee">
         <div class="columns">
             <div class="column is-half">
                 <div class="field">
                     <label class="label">Nom de la recette</label>
                     <div class="control">
-                        <input class="input" type="text" placeholder="Salade de pommes de terre" v-model="recette.nom">
+                        <input class="input" type="text" placeholder="Salade de pommes de terre" v-model="recette.nom" required="required">
                     </div>
                 </div>
 
                 <div class="field">
                     <label class="label">Auteur</label>
                     <div class="control">
-                        <input class="input" type="text" placeholder="97ème de Saint-Glinglin" v-model="recette.auteur">
+                        <input class="input" type="text" placeholder="97ème de Saint-Glinglin" v-model="recette.auteur" required="required">
                     </div>
                 </div>
 
@@ -39,7 +38,7 @@
                     <label class="label">Type</label>
                     <div class="control">
                         <div class="select">
-                            <select v-model="recette.type">
+                            <select v-model="recette.type" required>
                                 <option>Omnivore</option>
                                 <option>Végétarien</option>
                                 <option>Végétalien</option>
@@ -51,64 +50,73 @@
                 <div class="field">
                     <label class="label">Nombre de couverts</label>
                     <div class="control">
-                        <input class="input" type="number" placeholder="5" v-model="recette.couverts">
+                        <input class="input" type="number" placeholder="5" v-model="recette.couverts" required>
                     </div>
                 </div>
 
                 <div class="field">
                     <label class="label">Procédure</label>
                     <div class="control">
-                        <textarea class="textarea" placeholder="1. Eplucher les pommes de terre" v-model="recette.procedure"></textarea>
+                        <textarea class="textarea" placeholder="1. Eplucher les pommes de terre" v-model="recette.procedure" required></textarea>
                     </div>
                 </div>
-
                 <div class="field">
                     <label class="label">Ingrédients</label>
                 </div>
-
                 <div class="field is-horizontal" v-for="compo in recette.compositions" :key="compo.id">
-                    
                     <div class="field-body">
                         <div class="field">
                             <p class="control">
-                                <input class="input" type="number" placeholder="800" v-model="compo.quantite">
+                                <v-select 
+                                    :options="ingredients" 
+                                    label="nom" 
+                                    v-model="compo.ingredient"
+                                    @input="ingredient => updateUnit(compo, ingredient.mesure)">
+                                    <!-- <template #search="{attributes, events}">
+                                        <input
+                                        class="vs__search"
+                                        :required="!selected"
+                                        v-bind="attributes"
+                                        v-on="events"
+                                        />
+                                    </template> -->
+                                </v-select>
+                            </p>
+                        </div>
+                        <div class="field">
+                            <p class="control">
+                                <input class="input" type="number" placeholder="800" v-model="compo.quantite" required>
                             </p>
                         </div>
                         <div class="field">
                             <span class="control">
                                 <div class="select" >
-                                    <select v-model="compo.unite">
-                                        <option>gr</option>
-                                        <option>kg</option>
-                                        <option>l</option>
-                                        <option>ml</option>
+                                    <select v-model="compo.unite" v-if="compo.ingredient" required>
+                                        <option v-if="compo.ingredient.mesure === 'Masse'">kg</option>
+                                        <option v-if="compo.ingredient.mesure === 'Masse'">gr</option>
+                                        <option v-if="compo.ingredient.mesure === 'Volume'">l</option>
+                                        <option v-if="compo.ingredient.mesure === 'Volume'">ml</option>
                                     </select>
                                 </div>
                             </span>
                         </div>
-                        <div class="field">
-                            <p class="control">
-                                <v-select :options="ingredients" v-model="compo.ingredient"></v-select>
-                            </p>
-                        </div>
                     </div>
                 </div>
-
                 <div>
-                    <button class="button is-fullwidth" @click="ajouterIngredient">Ajouter un ingrédient</button>
+                    <button class="button is-fullwidth" @click="addIngredient">Ajouter un ingrédient</button>
                 </div>
-
                 <div class="field">
                     <div class="control">
-                        <button class="button is-primary" @click="ajouter()">Envoyer</button>
+                        <button class="button is-primary" type="submit">Envoyer</button>
                     </div>
                 </div>
 
             </div>
         </div>
-
+    </div>
+    </form>
         
-      </div>
+      
 
 </div>
 
@@ -137,13 +145,13 @@ export default {
                         id:1,
                         quantite: null,
                         unite: 'gr',
-                        ingredient: {code:0, label: null}
+                        ingredient: null
                     },
                     {
                         id:2,
                         quantite: null,
                         unite: 'gr',
-                        ingredient: {code:0, label: null}
+                        ingredient: null
                     }
                 ]
             },
@@ -153,7 +161,7 @@ export default {
         }
     },
     methods:{
-        ajouterIngredient() {
+        addIngredient() {
             this.recette.compositions.push(
                 {
                     id:2,
@@ -163,13 +171,28 @@ export default {
                 }
             );
         },
-        ajouter(){
-            console.log(this.recette)
-            axios.post("https://hook.integromat.com/rh9d6t7q8kxjiam2mx48q7d11ts00afs", this.recette)
-            .then(response => {
-                this.slug = response.data.slug;
-                this.ajoutee = true;
-            })
+        updateUnit(compo, mesure){
+            compo.unite = (mesure === "Masse" ? "kg" : "l");
+        },
+        post(){
+            if(this.validate()){
+                axios.post("https://hook.integromat.com/rh9d6t7q8kxjiam2mx48q7d11ts00afs", this.recette)
+                .then(response => {
+                    this.slug = response.data.slug;
+                    this.ajoutee = true;
+                })
+            }
+            else{
+                console.log("boom")
+            }
+        },
+        validate(){
+            let valid = (this.recette.nom && this.recette.auteur && this.recette.couverts && this.recette.procedure &&
+                         this.recette.type);
+            this.recette.compositions.forEach(c => {
+                valid = valid && (c.ingredient && c.unite && c.quantite);
+            });
+            return valid;
         }
     },
     mounted(){
@@ -181,16 +204,12 @@ export default {
                   ingredients {
                         id
                         nom
+                        mesure
                     }
             }`,
             },
         }).then((result) => {
-            console.log(JSON.stringify(result.data))
-            this.ingredients = result.data.data.ingredients.map(i => ({
-                code: i.id, 
-                label: i.nom
-                })
-            );
+            this.ingredients = result.data.data.ingredients;
         })
     }
   }
