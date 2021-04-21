@@ -18,7 +18,7 @@ class ShoppingList{
                     //all quantities will be kg or l
                     let conversionRatio = (c.unites === "gr" || c.unites === "ml") ? 1000 : 1;
                     let ingredientQty = ((c.quantite / conversionRatio) * ratio);
-                    let ingredientUnit = c.mesure[0] === "Masse" ? "kg" : "l";
+                    let ingredientUnit = c.mesure ? (c.mesure[0] === "Masse" ? "kg" : "l") : "kg";
                     if(!this.#ingredients.hasOwnProperty(ingredient)){
                         this.#ingredients[ingredient] = {totalQuantity: 0, recipes: [], unit: ingredientUnit, ingredient: ingredient, visible:false}
                     }

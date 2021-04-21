@@ -25,7 +25,7 @@
 
         <div class="columns is-multiline  mt-6">
             <div class="column is-one-quarter" v-for="recette in recettes" :key="recette.slug">
-              <nuxt-link :to="{path: '/recette/'+recette.slug}">
+              <nuxt-link :to="{path: '/recette?id='+recette.id}">
                 <div class="card" >
                   <div class="card-content">
                     <p class="title">
@@ -73,9 +73,10 @@ export default {
             data: {
             query: `{
                 recettes(_order_by: "nom") {
+                  id
                   nom
-                  slug,
-                  diet,
+                  slug
+                  diet
                   introduction
                 }
             }`,

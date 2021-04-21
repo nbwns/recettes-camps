@@ -75,7 +75,7 @@ export default {
     transpile: ['v-select']
   },
   generate: {
-    routes(){
+    /*routes(){
       console.log("generate")
       let recettes = axios({
         url: "https://api.baseql.com/airtable/graphql/apptVpg9XpET0IEyv",
@@ -123,7 +123,7 @@ export default {
       });
       
      
-    },
+    },*/
     fallback: true
   }
 }

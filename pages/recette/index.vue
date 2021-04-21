@@ -1,15 +1,15 @@
 <template>
     <div>
-        <Header>
+        <div>
+            <Header>
             <nuxt-link to="/">&lt; Retour</nuxt-link>
-            <h1 class="title is-1 pt-2">
-            {{recette.nom}}
+            <h1 class="title is-1 pt-2" v-if="recette">
+                {{recette.nom}}
             </h1>
-        </Header>
-
+            <div class="emptystate emptytitle" v-else>&nbsp;</div>
+            </Header>
         
-        
-        <div class="container">  
+            <div class="container">  
             <nav class="level">
                 <div class="level-left">
                 </div>
@@ -25,7 +25,7 @@
             </nav>
             
 
-            <div class="columns" v-if="recette.description">
+            <div class="columns" v-if="recette && recette.description">
                 <div class="column">
                     <article class="message is-info">
                         <div class="message-body">
@@ -70,24 +70,40 @@
                             </strong>
                         </div>
                     </div>
-                    <div v-for="compo in recette.compositions" :key="compo.nom" class="columns m-0 p-0 is-mobile">
-                        <div class="column">
-                            {{Math.floor(compo.quantite * plateRatio)}} {{compo.unites}} {{compo.nomIngredient[0]}}
+                    <div v-if="recette">
+                        <div v-for="compo in recette.compositions" :key="compo.nom" class="columns m-0 p-0 is-mobile">
+                            <div class="column">
+                                {{Math.floor(compo.quantite * plateRatio)}} {{compo.unites}} {{compo.nomIngredient[0]}}
+                            </div>
+                            <div class="column">
+                                {{ (compo.prix * plateRatio).toFixed(2) }} €
+                            </div>
                         </div>
-                        <div class="column">
-                            {{ (compo.prix * plateRatio).toFixed(2) }} €
+                        <div class="columns is-mobile m-0 p-0">
+                            <div class="column"><strong>Prix du plat</strong></div>
+                            <div class="column">{{(recette.prix * plateRatio).toFixed(2)}} €</div>
                         </div>
                     </div>
-                    <div class="columns is-mobile m-0 p-0">
-                        <div class="column"><strong>Prix du plat</strong></div>
-                        <div class="column">{{(recette.prix * plateRatio).toFixed(2)}} €</div>
+                    <div v-else>
+                        <div class="emptystate emptyline my-2"></div>
+                        <div class="emptystate emptyline my-2"></div>
+                        <div class="emptystate emptyline my-2"></div>
+                        <div class="emptystate emptyline my-2"></div>
+                        <div class="emptystate emptyline my-2"></div>
                     </div>
                 </div>
                 <div class="column">
                     <h2 class="is-size-4">Préparation</h2>
-                    <div class="pl-5" v-html="procedure"></div>
+                    <div class="pl-5" v-html="procedure" v-if="recette"></div>
+                    <div v-else>
+                        <div class="emptystate emptyline my-2"></div>
+                        <div class="emptystate emptyline my-2"></div>
+                        <div class="emptystate emptyline my-2"></div>
+                        <div class="emptystate emptyline my-2"></div>
+                        <div class="emptystate emptyline my-2"></div>
+                    </div>
                     <h2 class="is-size-4">Indices assiette écologique</h2>
-                    <div class="block px-2">
+                    <div class="block px-2" v-if="recette">
                         <div class="mb-2" title="Valeur optimale: entre 40 et 60g sec par personne">Céréales 
                             <meter class="meter is-small"
                                 min="0" max="120"
@@ -114,10 +130,16 @@
                                 :value="recette.assietteAutre"/>
                         </div>
                     </div>
+                    <div v-else>
+                        <div class="emptystate emptyline my-2"></div>
+                        <div class="emptystate emptyline my-2"></div>
+                        <div class="emptystate emptyline my-2"></div>
+                        <div class="emptystate emptyline my-2"></div>
+                    </div>
                 </div>
             </div>            
-        </div>
-        <div class="modal" :class="{'is-active': modal}">
+            </div>
+            <div class="modal" :class="{'is-active': modal}">
             <div class="modal-background"></div>
             <div class="modal-content">
                 <article class="message is-info">
@@ -130,6 +152,7 @@
                     </article>
             </div>
             <button class="modal-close is-large" aria-label="close" @click="modal=false"></button>
+            </div>
         </div>
     </div>
 </template>
@@ -170,52 +193,58 @@ export default {
       },
       print(){
           window.print();
+      },
+      fetchData(recordId){
+          if(recordId && recordId !== ''){
+            return axios({
+                    url: "https://api.baseql.com/airtable/graphql/apptVpg9XpET0IEyv",
+                    method: "post",
+                    data: {
+                    query: `{
+                    recettes(id: "${recordId}") {
+                            nom
+                            description
+                            nombreDePersonnes
+                            procedure
+                            compositions {
+                                nom
+                                quantite
+                                unites
+                                nomIngredient
+                                prix
+                                mesure
+                            }
+                            prix
+                            slug
+                            assietteAutre
+                            assietteCereale
+                            assietteLegume
+                            assietteLegumineuse
+                            contactAuteur
+                            auteur
+                        }
+                    }`,
+                    },
+                }).then((result) => {
+                    this.recette = result.data.data.recettes[0],
+                    this.plates = result.data.data.recettes[0].nombreDePersonnes
+                })
+          }
       }
     },
-    asyncData({ params, error, payload }){
+    mounted(){
+        return this.fetchData(this.$route.query.id);
+    }
+    /*asyncData({ params, error, payload }){
         console.log(payload);
         console.log(params)
         if (payload){
             return { recette: payload, plates: payload.nombreDePersonnes };
         }
         else {
-            return axios({
-                url: "https://api.baseql.com/airtable/graphql/apptVpg9XpET0IEyv",
-                method: "post",
-                data: {
-                query: `{
-                   recettes(slug: "${params.index}") {
-                        nom
-                        description
-                        nombreDePersonnes
-                        procedure
-                        compositions {
-                            nom
-                            quantite
-                            unites
-                            nomIngredient
-                            prix
-                            mesure
-                        }
-                        prix
-                        slug
-                        assietteAutre
-                        assietteCereale
-                        assietteLegume
-                        assietteLegumineuse
-                        contactAuteur
-                        auteur
-                    }
-                }`,
-                },
-            }).then((result) => {
-                return {
-                    recette: result.data.data.recettes[0],
-                    plates: result.data.data.recettes[0].nombreDePersonnes
-                }
-            })
+            
         }
-  }
+  }*/
 }
 </script>
 
@@ -248,5 +277,23 @@ export default {
 
 .meter.is-small {
     height: 0.75rem;
+}
+
+.emptystate{
+  background-color: whiteSmoke;;
+  border-radius: 0.25rem;
+  max-width: 100%;
+  overflow: hidden;
+  position: relative;
+}
+
+.emptytitle{
+  width: 400px;
+  height: 60px;
+}
+
+.emptyline{
+    width: 450px;
+    height: 30px;
 }
 </style>
