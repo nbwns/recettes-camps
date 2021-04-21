@@ -49,3 +49,26 @@ a:visited{
     cursor: -moz-grab;
     cursor: -webkit-grab;
 }
+
+.emptystate{
+    background-color: whiteSmoke;;
+    border-radius: 0.25rem;
+    max-width: 100%;
+    overflow: hidden;
+    position: relative;
+  }
+  
+  .emptytitle{
+    width: 400px;
+    height: 60px;
+  }
+  
+  .emptyline{
+      width: 450px;
+      height: 30px;
+  }
+
+  .emptycard{
+    width: 400px;
+    height: 150px;
+  }

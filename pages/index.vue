@@ -8,19 +8,11 @@
 
       <div class="container content-wrapper">
       
-        <div class="content">
-          <article class="message is-info mt-5">
-            <div class="message-body">
-              Chaque recette est un plat complet
-            </div>
-            </article>
-        </div>
-      
         <div class="columns is-multiline  mt-6" v-if="loading">
-            <div class="column is-one-quarter "><div class="emptystate">&nbsp;</div></div>
-            <div class="column is-one-quarter "><div class="emptystate">&nbsp;</div></div>
-            <div class="column is-one-quarter "><div class="emptystate">&nbsp;</div></div>
-            <div class="column is-one-quarter "><div class="emptystate">&nbsp;</div></div>
+            <div class="column is-one-quarter "><div class="emptystate emptycard">&nbsp;</div></div>
+            <div class="column is-one-quarter "><div class="emptystate emptycard">&nbsp;</div></div>
+            <div class="column is-one-quarter "><div class="emptystate emptycard">&nbsp;</div></div>
+            <div class="column is-one-quarter "><div class="emptystate emptycard">&nbsp;</div></div>
         </div>            
 
         <div class="columns is-multiline  mt-6">
@@ -28,13 +20,17 @@
               <nuxt-link :to="{path: '/recette?id='+recette.id}">
                 <div class="card" >
                   <div class="card-content">
-                    <p class="title">
-                      {{recette.nom}}
+                    <p class="title mb-0" 
+                        :class="{'omnivore': recette.diet === 'Omnivore', 'vege': recette.diet === 'Végétarien'}"
+                        :title="recette.diet">
+                      {{recette.nom}} 
                     </p>
-                    <div class="content">
+                     <p class="is-size-7">
+                        Par {{recette.auteur}}
+                      </p>
+                    <div class="content mt-3">
                       {{recette.introduction}}
                     </div>
-                    <span class="tag is-success is-light">{{recette.diet}}</span>
                   </div>
                   <footer class="card-footer">
                     <p class="card-footer-item">
@@ -78,6 +74,7 @@ export default {
                   slug
                   diet
                   introduction
+                  auteur
                 }
             }`,
             },
@@ -126,14 +123,20 @@ export default {
    transform: scale(1.05);
 }
 
-.emptystate{
-  background-color: whiteSmoke;;
-  border-radius: 0.25rem;
-  color: #4a4a4a;
-  max-width: 100%;
-  overflow: hidden;
-  position: relative;
-  width: 400px;
-  height: 200px;
+.omnivore::after {
+  content: "🍖";
+  font-size: 1rem;
+  position: absolute;
+  top: 17px;
+  left: 280px;
 }
+
+.vege::after {
+  content: "🥕";
+  font-size: 1rem;
+  position: absolute;
+  top: 17px;
+  left: 280px;
+}
+
 </style>

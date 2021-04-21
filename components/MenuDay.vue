@@ -11,7 +11,7 @@
                     <draggable
                     v-model="menuDay"
                     group="menu"
-                    dragClass="dragged"
+                    dragClass="dragged" @end="notifySave" 
                 >
                     <span class="tag is-large m-2 grabbable" v-for="r in menuDay" :key="r.slug">
                         <i class="fa fa-ellipsis-v is-size-7"></i><i class="fa fa-ellipsis-v is-size-7 mr-2"></i> {{r.nom}}
@@ -48,9 +48,14 @@ export default {
             }
         }
     },
-    mounted(){
-        console.log("MenuDay param", this.day)
-        console.log("MenuDay value", this.menuDay.length)
+    methods:{
+        notifySave(){
+            this.$toast.show('💾 Sauvegardé', { 
+                theme: "bubble", 
+                position: "top-center", 
+                duration : 1000
+            });
+        }
     }
 }
 </script>

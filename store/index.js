@@ -4,7 +4,8 @@ export const state = () => ({
     attendees: null,
     unplannedRecipes: [],
     menu: null,
-    trigger: 0
+    trigger: 0,
+    savedMenus: []
   })
   
   export const mutations = {
@@ -23,7 +24,10 @@ export const state = () => ({
     },
     setAttendees(state, attendees){
         state.attendees = attendees;
-    }
+    },
+    addToSavedMenus(state, menuId){
+        state.savedMenus.push(menuId);
+    },
   }
 
   

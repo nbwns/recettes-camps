@@ -23,7 +23,7 @@
             <div class="column is-half">
                 <article class="message is-warning">
                     <div class="message-body">
-                        <p>La recette doit être un <strong>plat complet</strong> auquel il ne faut rien ajouter.</p>
+                        <p>⚠️ La recette doit être un <strong>plat complet</strong> auquel il ne faut rien ajouter.</p>
                         <p>Si la recette s'accompagne par exemple de pain ou de riz, veuillez l'ajouter dans les ingrédients.</p>
                     </div>
                 </article>
@@ -66,7 +66,6 @@
                             <select v-model="recette.type" required>
                                 <option>Omnivore</option>
                                 <option>Végétarien</option>
-                                <option>Végétalien</option>
                             </select>
                         </div>
                     </div>

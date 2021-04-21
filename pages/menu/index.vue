@@ -13,7 +13,7 @@
             <div class="container">
               <div class="dashed-slot">
                 <draggable
-                  v-model="unplannedRecipes" group="menu" dragClass="dragged"  
+                  v-model="unplannedRecipes" group="menu" dragClass="dragged" @end="notifySave"  
                 >
                   <span class="tag is-large m-2 grabbable" v-for="r in unplannedRecipes" :key="r.slug">
                     <i class="fa fa-ellipsis-v is-size-7"></i><i class="fa fa-ellipsis-v is-size-7 mr-2"></i> {{r.nom}}
@@ -33,7 +33,7 @@
             <div class="level">
               <h2 class="title is-3">Calendrier</h2>
               <button class="button is-small" title="Recommencer" @click="menu = null">🔄</button>
-              <button class="button is-primary" @click="shareMenu()">Partager</button>
+              <button class="button is-primary" @click="shareModal=true">🔗 Partager</button>
             </div>
             <div class="container" v-if="menu">
               <MenuDay v-for="(recipes, day) in menu" :key="day" :day="day" :recipes="recipes"  />
@@ -104,6 +104,42 @@
           </div>
         </div>
       </div>
+      <div class="modal" :class="{'is-active': shareModal}">
+            <div class="modal-background"></div>
+            <div class="modal-content">
+                <div class="card">
+                  <header class="card-header">
+                    <p class="card-header-title">
+                      Partage ton menu !
+                    </p>
+                  </header>
+                  <div class="card-content">
+                      <div class="content">
+                        <p>
+                          Ton menu sera sauvegardé en ligne et tu pourras le retrouver sur cette page. 
+                        </p>
+                        <p>
+                          Quand ton menu changera, tu devras le sauvegarder de nouveau.
+                        </p>
+                        <form  v-on:submit.prevent="shareMenu">
+                          <div class="field">
+                            <label class="label">Nom du menu</label>
+                              <div class="control">
+                                  <input class="input" type="text" v-model="menuName" placeholder="Menu du camp d'été de la 97ème" required>
+                              </div>
+                          </div>
+                          <button class="button is-primary" :disabled="sendingData">
+                            <span v-if="!sendingData">Sauvegarder le menu en ligne</span>
+                            <span v-else>...</span>
+                          </button>
+                          <button class="button" :disabled="sendingData" @click="shareModal=false">Annuler</button>
+                        </form>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <button class="modal-close is-large" aria-label="close" @click="shareModal=false"></button>
+            </div>
   </div>
 </template>
 
@@ -125,7 +161,11 @@ export default {
       return {
         plates:0,
         start: null,
-        end: null
+        end: null,
+        shareModal: false,
+        menuName: null,
+        sendingData: false,
+        shareId: null,
       }
     },
     computed:{
@@ -163,13 +203,39 @@ export default {
       shareMenu(){
         let shareableMenu = {
           attendees: this.$store.state.attendees,
-          menu: this.$store.state.menu
+          menu: this.$store.state.menu,
+          name: this.menuName
         }
 
-        this.$axios.post("https://hook.integromat.com/sqep1g9vmcrbvt13tfzcjmvv1rcwzods?action=save", shareableMenu)
-                .then(response => {
-                    console.log(response.data.id);
-                })
+        this.sendingData = true;
+        this.$axios.post("https://hook.integromat.com/sqep1g9vmcrbvt13tfzcjmvv1rcwzods?action=save&id=" + this.menuName, shareableMenu)
+          .then(response => {
+              this.shareId = response.data.ID;
+              console.log(this.shareId)
+              this.sendingData = false;
+              this.shareModal = false;
+              this.$store.commit('addToSavedMenus', this.shareId);
+              this.$toast.show('👍 Menu sauvegardé ', { 
+                theme: "bubble", 
+                position: "top-center", 
+                duration : 5000,
+                action : [
+                  {
+                      text : 'Voir',
+                      onClick : (e, toastObject) => {
+                          this.$router.push({ path: 'menu/partage', query: { id: this.shareId } })
+                      }
+                  }
+                ]
+                });
+          })
+      },
+      notifySave(){
+        this.$toast.show('💾 Sauvegardé', { 
+            theme: "bubble", 
+            position: "top-center", 
+            duration : 1000
+        });
       }
     }
 }

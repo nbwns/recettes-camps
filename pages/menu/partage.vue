@@ -1,10 +1,18 @@
 <template>
   <div>
       <Header>
-          <h1 class="title is-1">Menu partagé</h1>
+          <h1 class="title is-1" v-if="name">{{name}}</h1>
+          <div v-else class="emptystate emptytitle"></div>
       </Header>
 
-        <button @click="fetchData('recBhfdqUyqfmaQsV')">go</button>
+     <div class="container" v-if="menu">
+         <div v-for="(recipes, day) in menu" :key="day">
+             {{day}}
+             <div v-for="r in recipes" :key="r.nom">
+                 {{r.nom}}
+             </div>
+         </div>
+     </div>
   </div>
 </template>
 
@@ -18,7 +26,8 @@ export default {
     data(){
         return {
             attendees: 0,
-            menu: null
+            menu: null,
+            name: null
         }
     },
     methods:{
@@ -26,14 +35,15 @@ export default {
             if(recordId && recordId !== ''){
                 return this.$axios("https://hook.integromat.com/sqep1g9vmcrbvt13tfzcjmvv1rcwzods?action=get&id="+ recordId)
                 .then((result) => {
-                    console.log(result.data)
-                    
+                    this.attendees = result.data.attendees;
+                    this.menu = result.data.menu;
+                    this.name = result.data.name;
                 })
             }
         }
     },
     mounted(){
-        //return this.fetchData(this.$route.query.id);
+        return this.fetchData(this.$route.query.id);
     }
 }
 </script>

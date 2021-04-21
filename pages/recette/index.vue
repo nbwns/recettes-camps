@@ -188,7 +188,15 @@ export default {
           this.$toast.show('👍 Recette ajoutée au menu', { 
                 theme: "bubble", 
                 position: "top-center", 
-                duration : 1550
+                duration : 1550,
+                action : [
+                  {
+                      text : 'Voir le menu',
+                      onClick : (e, toastObject) => {
+                          this.$router.push({ path: 'menu' })
+                      }
+                  }
+                ]
             });
       },
       print(){
@@ -288,23 +296,5 @@ export default {
 
 .meter.is-small {
     height: 0.75rem;
-}
-
-.emptystate{
-  background-color: whiteSmoke;;
-  border-radius: 0.25rem;
-  max-width: 100%;
-  overflow: hidden;
-  position: relative;
-}
-
-.emptytitle{
-  width: 400px;
-  height: 60px;
-}
-
-.emptyline{
-    width: 450px;
-    height: 30px;
 }
 </style>
