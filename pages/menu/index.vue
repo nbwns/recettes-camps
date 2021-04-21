@@ -17,7 +17,7 @@
               </div>
               <button class="button mt-0" title="Vider la liste des recettes disponibles" @click="unplannedRecipes = []" :disabled="unplannedRecipes.length === 0">🗑️ Vider la liste</button>
             </div>
-            <div class="container" v-if="unplannedRecipes.length > 0">
+            <div class="container" >
               <div class="dashed-slot">
                 <draggable
                   v-model="unplannedRecipes" group="menu" dragClass="dragged" @end="notifySave"  
@@ -28,7 +28,7 @@
                 </draggable>
               </div>
             </div>
-            <div class="container" v-else>
+            <div class="container" v-if="unplannedRecipes.length == 0">
               <article class="message is-warning mt-5">
                 <div class="message-body">
                   Tu n'as aucune recette à placer dans ton menu. Pour ajouter une recette ici, clique sur "📝 Ajouter au menu" dans les recettes que tu veux planifier.
@@ -42,7 +42,7 @@
             <div class="level">
               <div>
                 <h2 class="title is-3">Calendrier</h2>
-                <p class="subtitle is-6">Le calendrier te permet de planifier ton menu de camp. Il est sauvegardé automatiquement dans ton navigateur.</p>  
+                <p class="subtitle is-6">Le calendrier te permet de planifier ton menu de camp. Tu peux également déplacer des recettes de nouveau dans tes recettes à planifier. Le calendrier est sauvegardé automatiquement dans ton navigateur.</p>  
               </div>
               <div>
                 <button class="button is-primary" @click="shareModal=true" :disabled="menu==null">🔗 Partager</button>
