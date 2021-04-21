@@ -28,6 +28,9 @@ export const state = () => ({
     addToSavedMenus(state, menuId){
         state.savedMenus.push(menuId);
     },
+    updateSavedMenus(state, value){
+        state.savedMenus = value;
+    }
   }
 
   

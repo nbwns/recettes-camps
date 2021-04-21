@@ -1,7 +1,8 @@
 <template>
   <div>
+      Budget: 
       <div class="tag is-rounded is-large clickable" @click="active=true">
-           <span class="is-size-3">{{totalBudget.toFixed()}}€</span>
+           <span class="is-size-4">{{totalBudget.toFixed()}}€</span>
       </div>
 
 

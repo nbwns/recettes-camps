@@ -4,24 +4,31 @@
           <h1 class="title is-1">Mon menu de camp</h1>
       </Header>
       <div class="container">
+        <nav class="level">
+          <div class="level-left"></div>
+          <div class="level-right"><menu-price/></div>
+        </nav>
         <div class="columns">
           <div class="column">
             <div class="level">
-              <h2 class="title is-3">Recettes à planifier</h2> 
-              <button class="button is-small" title="Vider la liste des recettes disponibles" @click="unplannedRecipes = []">🗑️</button>
+              <div>
+                <h2 class="title is-3">Recettes à planifier</h2> 
+                <p class="subtitle is-6">Ta collection de recettes trop miam que tu as envie de cuisiner pendant ton camp. Cette liste est sauvegardée automatiquement dans ton navigateur.</p>  
+              </div>
+              <button class="button mt-0" title="Vider la liste des recettes disponibles" @click="unplannedRecipes = []" :disabled="unplannedRecipes.length === 0">🗑️ Vider la liste</button>
             </div>
-            <div class="container">
+            <div class="container" v-if="unplannedRecipes.length > 0">
               <div class="dashed-slot">
                 <draggable
                   v-model="unplannedRecipes" group="menu" dragClass="dragged" @end="notifySave"  
                 >
-                  <span class="tag is-large m-2 grabbable" v-for="r in unplannedRecipes" :key="r.slug">
+                  <span class="tag is-medium m-2 grabbable" v-for="r in unplannedRecipes" :key="r.slug">
                     <i class="fa fa-ellipsis-v is-size-7"></i><i class="fa fa-ellipsis-v is-size-7 mr-2"></i> {{r.nom}}
                   </span>
                 </draggable>
               </div>
             </div>
-            <div class="container" v-if="unplannedRecipes.length == 0">
+            <div class="container" v-else>
               <article class="message is-warning mt-5">
                 <div class="message-body">
                   Tu n'as aucune recette à placer dans ton menu. Pour ajouter une recette ici, clique sur "📝 Ajouter au menu" dans les recettes que tu veux planifier.
@@ -29,75 +36,80 @@
               </article>
             </div>
           </div>
+        </div>
+        <div class="columns">
           <div class="column">
             <div class="level">
-              <h2 class="title is-3">Calendrier</h2>
-              <button class="button is-small" title="Recommencer" @click="menu = null">🔄</button>
-              <button class="button is-primary" @click="shareModal=true">🔗 Partager</button>
+              <div>
+                <h2 class="title is-3">Calendrier</h2>
+                <p class="subtitle is-6">Le calendrier te permet de planifier ton menu de camp. Il est sauvegardé automatiquement dans ton navigateur.</p>  
+              </div>
+              <div>
+                <button class="button is-primary" @click="shareModal=true" :disabled="menu==null">🔗 Partager</button>
+                <button class="button" title="Recommencer" @click="menu = null" :disabled="menu==null">🗑️ Recommencer</button>
+              </div>
             </div>
             <div class="container" v-if="menu">
-              <MenuDay v-for="(recipes, day) in menu" :key="day" :day="day" :recipes="recipes"  />
+              <div class="columns is-multiline mb-5">
+                <MenuDay v-for="(recipes, day) in menu" :key="day" :day="day" :recipes="recipes"  />
+              </div>
             </div>
-            <div class="container" v-else>
+            <div class="container mb-5" v-else>
               <article class="message is-warning">
                 <div class="message-body">
-                  Sélectionne d'abord le nombre de couverts et les dates de ton camp.
+                  Sélectionne d'abord les dates de ton camp et le nombre de couverts.
                 </div>
               </article>
-              <div class="field is-horizontal">
-                  <div class="field-label ">
-                      <label class="label">Couverts</label>
-                  </div>
-                  <div class="field-body">
-                      <div class="field is-narrow">
-                          <div class="control">
-                              <input class="input" type="number" v-model="plates" placeholder="25">
-                          </div>
-                      </div>
-                  </div>
-              </div>
-              <div class="field is-horizontal">
-                  <div class="field-label ">
-                      <label class="label">Date de début</label>
-                  </div>
-                  <div class="field-body">
-                      <div class="field is-narrow">
-                          <div class="control">
-                              <input class="input" type="date" v-model="start" placeholder="15/07/2021">
-                          </div>
-                      </div>
-                  </div>
-              </div>
-              <div class="field is-horizontal">
-                  <div class="field-label ">
-                      <label class="label">Date de fin</label>
-                  </div>
-                  <div class="field-body">
-                      <div class="field is-narrow">
-                          <div class="control">
-                              <input class="input" type="date" v-model="end" placeholder="30/07/2021">
-                          </div>
-                      </div>
-                  </div>
-              </div>
-              <div class="field is-horizontal">
-                <div class="field-label">
-                  <!-- Left empty for spacing -->
-                </div>
-                <div class="field-body">
-                  <div class="field">
-                    <div class="control">
-                      <button class="button is-primary" @click="initMenu">
-                        OK
-                      </button>
+              <form v-on:submit.prevent="initMenu">
+                <div class="field">
+                    <div class="label ">
+                        <label class="label">Date de début</label>
                     </div>
+                    <div class="control">
+                        <input class="input" type="date" v-model="start" placeholder="15/07/2021" required>
+                    </div>
+                </div>
+                <div class="field">
+                    <div class="label">
+                        <label class="label">Date de fin</label>
+                    </div>
+                    <div class="control">
+                        <input class="input" type="date" v-model="end" placeholder="30/07/2021" required>
+                    </div>
+                </div>
+                <div class="field">
+                    <div class="label ">
+                        <label class="label">Couverts</label>
+                    </div>
+                    <div class="control">
+                        <input class="input" type="number" v-model="plates" placeholder="25" required>
+                    </div>
+                    <p class="help">Cela servira à étalonner les quantités de chaque recette, de calculer le budget et créer la liste de courses.</p>
+                </div>
+                <div class="field">
+                  <div class="control">
+                    <button class="button is-primary">
+                      C'est bon !
+                    </button>
                   </div>
                 </div>
-              </div>
+              </form>
           </div>
           </div>
+        </div>
+        <div class="columns">
           <div class="column">
-            <menu-price/>
+            <div class="level">
+              <div>
+                <h2 class="title is-3">Mes menus</h2> 
+                <p class="subtitle is-6">Les menus que tu as sauvegardé en ligne afin de les partager. Ta liste de menus est conservée dans ton navigateur.</p>  
+              </div>
+            </div>
+            <div>
+              <p v-for="m in savedMenus" :key="m">
+                <nuxt-link  :to="'menu/partage?id='+m">{{m}}</nuxt-link>
+              </p>
+            </div>
           </div>
         </div>
       </div>
@@ -113,7 +125,7 @@
               <div class="card-content">
                   <div class="content">
                     <p>
-                      Ton menu sera sauvegardé en ligne et tu pourras le retrouver sur cette page. 
+                      Ton menu sera <strong>sauvegardé en ligne</strong> et tu pourras le <strong>partager</strong>. 
                     </p>
                     <p>
                       Quand ton menu changera, tu devras le sauvegarder de nouveau.
@@ -126,7 +138,7 @@
                           </div>
                       </div>
                       <button class="button is-primary" :disabled="sendingData">
-                        <span v-if="!sendingData">Sauvegarder le menu en ligne</span>
+                        <span v-if="!sendingData">☁️ Sauvegarder le menu en ligne</span>
                         <span v-else>...</span>
                       </button>
                       <button class="button" :disabled="sendingData" @click="shareModal=false">Annuler</button>
@@ -157,7 +169,7 @@ export default {
     },
     data() {
       return {
-        plates:0,
+        plates:null,
         start: null,
         end: null,
         shareModal: false,
@@ -183,20 +195,30 @@ export default {
           console.log("menu state changes");
           this.$store.commit('updateMenu', value);
         }
-    }
+      },
+      savedMenus: {
+        get() {
+            return this.$store.state.savedMenus
+        },
+        set(value){
+          this.$store.commit('updateSavedMenus', value);
+        }
+      }
     },
     methods:{
       initMenu(){
-        this.$store.commit('setAttendees', this.plates);
-        let startMoment = moment(this.start);
-        let endMoment = moment(this.end);
-        let diff = endMoment.diff(startMoment, 'days');
-        let menu= {};
-        menu[startMoment.format('DD/MM/YYYY')] = [];
-        for(let i = 0; i < diff; i++){
-          menu[startMoment.add(1, 'days').format('DD/MM/YYYY')] = [];
+        if(this.start && this.end && this.plates){
+          this.$store.commit('setAttendees', this.plates);
+          let startMoment = moment(this.start);
+          let endMoment = moment(this.end);
+          let diff = endMoment.diff(startMoment, 'days');
+          let menu= {};
+          menu[startMoment.format('DD/MM/YYYY')] = [];
+          for(let i = 0; i < diff; i++){
+            menu[startMoment.add(1, 'days').format('DD/MM/YYYY')] = [];
+          }
+          this.$store.commit('updateMenu', menu);
         }
-        this.$store.commit('updateMenu', menu);
       },
       shareMenu(){
         let shareableMenu = {
@@ -246,7 +268,7 @@ export default {
 
 .dashed-slot{
   border: 1px gray solid;
-  min-height: 150px;
+  min-height: 80px;
   border-radius: 4px;
 
 }

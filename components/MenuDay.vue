@@ -1,25 +1,27 @@
 <template>
   <div>
-      <div class="card mb-2">
+      <div class="column">
+      <div class="card mb-2 calendar-day ">
             <header class="card-header">
-            <p class="card-header-title">
+            <p class="is-size-6 p-2">
                 {{day}}
             </p>
             </header>
-            <div class="card-content">
-                <div class="slot">
+            <div class="card-content p-0">
+                <div class="slot ">
                     <draggable
                     v-model="menuDay"
                     group="menu"
-                    dragClass="dragged" @end="notifySave" 
+                    dragClass="dragged" @end="notifySave" ghostClass="ghost"
                 >
-                    <span class="tag is-large m-2 grabbable" v-for="r in menuDay" :key="r.slug">
+                    <div class="tag m-2 is-medium grabbable calendar-item" v-for="r in menuDay" :key="r.slug">
                         <i class="fa fa-ellipsis-v is-size-7"></i><i class="fa fa-ellipsis-v is-size-7 mr-2"></i> {{r.nom}}
-                    </span>
+                    </div>
                     </draggable>
                 </div>
             </div>
         </div>
+      </div>
   </div>
 </template>
 
@@ -63,7 +65,20 @@ export default {
 <style scoped>
   .slot{
     border: 1px gray dashed;
-    min-height: 48px;
+    min-height: 50px;
     border-radius: 2px;
+  }
+
+  .calendar-day{
+      min-width: 180px;
+      box-shadow: none;
+  }
+
+  .calendar-item{
+      display: flex;
+  }
+
+  .ghost{
+      
   }
 </style>

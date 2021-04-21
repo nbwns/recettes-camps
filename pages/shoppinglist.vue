@@ -16,6 +16,11 @@
                     </div>
                 </div>
             </nav> 
+            <article class="message is-warning" v-if="Object.keys(shoppingList).length == 0">
+                <div class="message-body ">
+                    Il n'y a rien ici ! Tu dois d'abord <nuxt-link to="menu">créer un menu de camp</nuxt-link> 🤓
+                </div>
+                </article>
             <div class="columns">
                 <div class="column ml-5">
                     <div v-for="(item, index) in shoppingList" :key="item.ingredient">
