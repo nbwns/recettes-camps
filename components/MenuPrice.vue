@@ -1,17 +1,65 @@
 <template>
   <div>
-      <p>
-        <strong>Budget pour tout le camp</strong> {{totalBudget.toFixed()}} €
-      </p>
-      <p>
-        <strong>Budget par personne pour tout le camp</strong> {{budgetPerServing.toFixed()}} €
-      </p>
-      <p>
-        <strong>Budget moyen par jour </strong> {{avgPerDay.toFixed()}} €
-      </p>
-      <p>
-        <strong>Budget moyen par personne par jour </strong> {{avgPerServingPerDay.toFixed()}} €
-      </p>
+      <div class="tag is-rounded is-large clickable" @click="active=true">
+           <span class="is-size-3">{{totalBudget.toFixed()}}€</span>
+      </div>
+
+
+      <div class="modal" :class="{'is-active': active}">
+        <div class="modal-background"></div>
+        <div class="modal-content">
+            <div class="card">
+              <header class="card-header">
+                <p class="card-header-title">
+                  Ton budget
+                </p>
+              </header>
+              <div class="card-content">
+                <div class="columns">
+                    <div class="column">
+
+                    </div>
+                    <div class="column">
+
+                    </div>
+                </div>
+                <div class="columns">
+                    <div class="column">
+                        Budget pour tout le camp
+                    </div>
+                    <div class="column">
+                        <strong>{{totalBudget.toFixed()}} €</strong>
+                    </div>
+                </div>
+                <div class="columns">
+                    <div class="column">
+                         Budget par personne pour tout le camp
+                    </div>
+                    <div class="column">
+                         <strong>{{budgetPerServing.toFixed()}} €</strong>
+                    </div>
+                </div>
+                <div class="columns">
+                    <div class="column">
+                        Budget moyen par jour 
+                    </div>
+                    <div class="column">
+                        <strong>{{avgPerDay.toFixed()}} €</strong>
+                    </div>
+                </div>
+                <div class="columns">
+                    <div class="column">
+                        Budget moyen par personne par jour 
+                    </div>
+                    <div class="column">
+                        <strong>{{avgPerServingPerDay.toFixed()}} €</strong>
+                    </div>
+                </div>
+              </div>
+            </div>
+        </div>
+        <button class="modal-close is-large" aria-label="close" @click="active=false"></button>
+      </div>
   </div>
 </template>
 
@@ -23,7 +71,8 @@ export default {
             totalBudget: 0,
             budgetPerServing: 0,
             avgPerDay: 0,
-            avgPerServingPerDay: 0
+            avgPerServingPerDay: 0,
+            active:false
         }
     },
     computed: {

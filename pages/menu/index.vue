@@ -97,49 +97,47 @@
           </div>
           </div>
           <div class="column">
-            <div class="level">
-              <h2 class="title is-3">Budget</h2>
-            </div>
             <menu-price/>
           </div>
         </div>
       </div>
       <div class="modal" :class="{'is-active': shareModal}">
-            <div class="modal-background"></div>
-            <div class="modal-content">
-                <div class="card">
-                  <header class="card-header">
-                    <p class="card-header-title">
-                      Partage ton menu !
+        <div class="modal-background"></div>
+        <div class="modal-content">
+            <div class="card">
+              <header class="card-header">
+                <p class="card-header-title">
+                  Partage ton menu !
+                </p>
+              </header>
+              <div class="card-content">
+                  <div class="content">
+                    <p>
+                      Ton menu sera sauvegardé en ligne et tu pourras le retrouver sur cette page. 
                     </p>
-                  </header>
-                  <div class="card-content">
-                      <div class="content">
-                        <p>
-                          Ton menu sera sauvegardé en ligne et tu pourras le retrouver sur cette page. 
-                        </p>
-                        <p>
-                          Quand ton menu changera, tu devras le sauvegarder de nouveau.
-                        </p>
-                        <form  v-on:submit.prevent="shareMenu">
-                          <div class="field">
-                            <label class="label">Nom du menu</label>
-                              <div class="control">
-                                  <input class="input" type="text" v-model="menuName" placeholder="Menu du camp d'été de la 97ème" required>
-                              </div>
+                    <p>
+                      Quand ton menu changera, tu devras le sauvegarder de nouveau.
+                    </p>
+                    <form  v-on:submit.prevent="shareMenu">
+                      <div class="field">
+                        <label class="label">Nom du menu</label>
+                          <div class="control">
+                              <input class="input" type="text" v-model="menuName" placeholder="Menu du camp d'été de la 97ème" required>
                           </div>
-                          <button class="button is-primary" :disabled="sendingData">
-                            <span v-if="!sendingData">Sauvegarder le menu en ligne</span>
-                            <span v-else>...</span>
-                          </button>
-                          <button class="button" :disabled="sendingData" @click="shareModal=false">Annuler</button>
-                        </form>
                       </div>
-                    </div>
+                      <button class="button is-primary" :disabled="sendingData">
+                        <span v-if="!sendingData">Sauvegarder le menu en ligne</span>
+                        <span v-else>...</span>
+                      </button>
+                      <button class="button" :disabled="sendingData" @click="shareModal=false">Annuler</button>
+                    </form>
+                  </div>
                 </div>
             </div>
-            <button class="modal-close is-large" aria-label="close" @click="shareModal=false"></button>
-            </div>
+        </div>
+        <button class="modal-close is-large" aria-label="close" @click="shareModal=false"></button>
+      </div>
+      
   </div>
 </template>
 
