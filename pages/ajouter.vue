@@ -11,7 +11,7 @@
             <div class="column">
                 <div class="notification is-primary">
                     Recette ajoutée ! <br/>
-                    <nuxt-link :to="{path: '/recette/'+slug}">Je vais voir la recette</nuxt-link>
+                    <nuxt-link :to="{path: '/recette?id='+recordId}">Je vais voir la recette</nuxt-link>
                 </div>
             </div>
         </div>
@@ -190,7 +190,8 @@ export default {
             },
             ingredients: [],
             ajoutee: false,
-            slug: null
+            slug: null,
+            recordId: null
         }
     },
     methods:{
@@ -219,6 +220,7 @@ export default {
                 axios.post("https://hook.integromat.com/rh9d6t7q8kxjiam2mx48q7d11ts00afs", this.recette)
                 .then(response => {
                     this.slug = response.data.slug;
+                    this.recordId = response.data.id;
                     this.ajoutee = true;
                 })
             }

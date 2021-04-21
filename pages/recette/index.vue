@@ -16,9 +16,9 @@
                 <div class="level-right">
                     <div class="level-item">
                         <div class="buttons">
-                            <button class="button is-primary" @click="addToUnplannedRecipes(recette)">📝 Ajouter au menu</button>
+                            <button class="button is-primary" @click="addToUnplannedRecipes(recette)" :disabled="recette === null">📝 Ajouter au menu</button>
                             <!--<button class="button">✨ Personnaliser</button>-->
-                            <button class="button" @click="print()">🖨️ Imprimer</button>
+                            <button class="button" @click="print()" :disabled="recette === null">🖨️ Imprimer</button>
                         </div>
                     </div>
                 </div>
@@ -249,13 +249,11 @@ export default {
 </script>
 
 <style>
-.meter{
+.meter, .meter::-webkit-meter-bar{
     background: none;
     background-color: whiteSmoke;
-    -moz-appearance: none;
-    -webkit-appearance: none;
     border: none;
-    border-radius: 290486px;
+    border-radius: 100px;
     display: block;
     height: 1rem;
     overflow: hidden;
@@ -267,8 +265,21 @@ export default {
     background: hsl(141, 71%, 48%)
 }
 
+.meter::-webkit-meter-optimum-value{
+    background: hsl(141, 71%, 48%)
+
+}
+
 .meter:-moz-meter-sub-optimum::-moz-meter-bar{
     background: hsl(48, 100%, 67%)
+}
+
+.meter::-webkit-meter-suboptimum-value{
+    background: hsl(48, 100%, 67%)
+}
+
+.meter::-webkit-meter-even-less-good-value{
+    background: hsl(348, 100%, 61%)
 }
 
 .meter:-moz-meter-sub-sub-optimum::-moz-meter-bar{
