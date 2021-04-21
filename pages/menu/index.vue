@@ -33,6 +33,7 @@
             <div class="level">
               <h2 class="title is-3">Calendrier</h2>
               <button class="button is-small" title="Recommencer" @click="menu = null">🔄</button>
+              <button class="button is-primary" @click="shareMenu()">Partager</button>
             </div>
             <div class="container" v-if="menu">
               <MenuDay v-for="(recipes, day) in menu" :key="day" :day="day" :recipes="recipes"  />
@@ -158,6 +159,17 @@ export default {
           menu[startMoment.add(1, 'days').format('DD/MM/YYYY')] = [];
         }
         this.$store.commit('updateMenu', menu);
+      },
+      shareMenu(){
+        let shareableMenu = {
+          attendees: this.$store.state.attendees,
+          menu: this.$store.state.menu
+        }
+
+        this.$axios.post("https://hook.integromat.com/sqep1g9vmcrbvt13tfzcjmvv1rcwzods?action=save", shareableMenu)
+                .then(response => {
+                    console.log(response.data.id);
+                })
       }
     }
 }
