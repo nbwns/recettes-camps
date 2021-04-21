@@ -27,7 +27,7 @@
 
             <div class="columns" v-if="recette.description">
                 <div class="column">
-                    <article class="message">
+                    <article class="message is-info">
                         <div class="message-body">
                             {{recette.description}}
                         </div>
@@ -87,11 +87,32 @@
                     <h2 class="is-size-4">Préparation</h2>
                     <div class="pl-5" v-html="procedure"></div>
                     <h2 class="is-size-4">Indices assiette écologique</h2>
-                    <div class="block">
-                        <div class="mb-2">Céréales <progress class="ml-5 progress is-warning is-small" :value="recette.proportionCereales" max="1"></progress></div>
-                        <div class="mb-2">Légumineuses <progress class="ml-5 progress is-success is-small" :value="recette.proportionLegumineuses" max="1"></progress></div>
-                        <div class="mb-2">Légumes <progress class="ml-5 progress is-danger is-small" :value="recette.proportionLegumes" max="1"></progress></div>
-                        <div class="mb-2">Autre <progress class="ml-5 progress is-info is-small" :value="recette.proportionAutre" max="1"></progress></div>
+                    <div class="block px-2">
+                        <div class="mb-2" title="Valeur optimale: entre 40 et 60g sec par personne">Céréales 
+                            <meter class="meter is-small"
+                                min="0" max="120"
+                                low="39" high="61" optimum="50"
+                                :value="recette.assietteCereale"/>
+                        </div>
+                        <div class="mb-2" title="Valeur optimale: entre 20 et 30g sec par personne">Légumineuses 
+                            <meter class="meter is-small"
+                                min="0" max="60"
+                                low="19" high="31" optimum="25"
+                                :value="recette.assietteLegumineuse"/>
+                        </div>
+
+                        <div class="mb-2" title="Valeur optimale: 300g par personne">Légumes 
+                            <meter class="meter is-small"
+                                min="0" max="400"
+                                low="150" high="299" optimum="300"
+                                :value="recette.assietteLegume"/>
+                        </div>
+                        <div class="mb-2" title="Viande, fromage, huile, beurre,... Valeur optimale: max 30g par personne">Autre 
+                            <meter class="meter is-small"
+                                min="0" max="95"
+                                low="31" high="89" optimum="30"
+                                :value="recette.assietteAutre"/>
+                        </div>
                     </div>
                 </div>
             </div>            
@@ -102,14 +123,13 @@
                 <article class="message is-info">
                     <div class="message-header">
                         <p>Prix indicatif</p>
-                        <button class="delete" aria-label="delete" @click="modal=false"></button>
                     </div>
                     <div class="message-body">
                         Les prix sont basés sur l'offre du Marché de la Glacière à Saint-Gilles qui travaille en direct avec des petits producteurs et grossistes bio.
                     </div>
                     </article>
             </div>
-            <button class="modal-close is-large" aria-label="close"></button>
+            <button class="modal-close is-large" aria-label="close" @click="modal=false"></button>
         </div>
     </div>
 </template>
@@ -179,10 +199,10 @@ export default {
                         }
                         prix
                         slug
-                        proportionLegumineuses
-                        proportionLegumes
-                        proportionCereales
-                        proportionAutre
+                        assietteAutre
+                        assietteCereale
+                        assietteLegume
+                        assietteLegumineuse
                         contactAuteur
                         auteur
                     }
@@ -200,5 +220,33 @@ export default {
 </script>
 
 <style>
+.meter{
+    background: none;
+    background-color: whiteSmoke;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    border: none;
+    border-radius: 290486px;
+    display: block;
+    height: 1rem;
+    overflow: hidden;
+    padding: 0;
+    width: 100%;
+}
 
+.meter:-moz-meter-optimum::-moz-meter-bar{
+    background: hsl(141, 71%, 48%)
+}
+
+.meter:-moz-meter-sub-optimum::-moz-meter-bar{
+    background: hsl(48, 100%, 67%)
+}
+
+.meter:-moz-meter-sub-sub-optimum::-moz-meter-bar{
+    background: hsl(348, 100%, 61%)
+}
+
+.meter.is-small {
+    height: 0.75rem;
+}
 </style>

@@ -16,10 +16,19 @@
             </div>
         </div>
     </div>
-    <form v-on:submit.prevent="post">
+    <form v-on:submit.prevent="post" class="mb-5">
       <div class="container" v-if="!ajoutee">
         <div class="columns">
+           
             <div class="column is-half">
+                <article class="message is-warning">
+                    <div class="message-body">
+                        <p>La recette doit être un <strong>plat complet</strong> auquel il ne faut rien ajouter.</p>
+                        <p>Si la recette s'accompagne par exemple de pain ou de riz, veuillez l'ajouter dans les ingrédients.</p>
+                    </div>
+                </article>
+
+
                 <div class="field">
                     <label class="label">Nom de la recette</label>
                     <div class="control">
@@ -130,6 +139,7 @@
                     <div class="control">
                         <button class="button is-primary" type="submit">Envoyer</button>
                     </div>
+                    <p class="help">La recette sera immédiatement ajoutée à la base de données.</p>
                 </div>
 
             </div>

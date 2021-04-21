@@ -2,18 +2,27 @@
   <div class="page-wrapper">
       <Header className="is-primary">
             <h1 class="title is-1">
-              Camps zéro déchet
+              Super Intendant
             </h1>
-            <h2 class="subtitle mt-1">
-              Fiches recettes et création de menus
-            </h2>
       </Header>
-      
-      <div class="container mt-6" v-show="loading">
-        ça arrive...
-      </div>
 
       <div class="container content-wrapper">
+      
+        <div class="content">
+          <article class="message is-info mt-5">
+            <div class="message-body">
+              Chaque recette est un plat complet
+            </div>
+            </article>
+        </div>
+      
+        <div class="columns is-multiline  mt-6" v-if="loading">
+            <div class="column is-one-quarter "><div class="emptystate">&nbsp;</div></div>
+            <div class="column is-one-quarter "><div class="emptystate">&nbsp;</div></div>
+            <div class="column is-one-quarter "><div class="emptystate">&nbsp;</div></div>
+            <div class="column is-one-quarter "><div class="emptystate">&nbsp;</div></div>
+        </div>            
+
         <div class="columns is-multiline  mt-6">
             <div class="column is-one-quarter" v-for="recette in recettes" :key="recette.slug">
               <nuxt-link :to="{path: '/recette/'+recette.slug}">
@@ -114,5 +123,16 @@ export default {
 .fab:hover {
    box-shadow: 0 6px 14px 0 #666;
    transform: scale(1.05);
+}
+
+.emptystate{
+  background-color: whiteSmoke;;
+  border-radius: 0.25rem;
+  color: #4a4a4a;
+  max-width: 100%;
+  overflow: hidden;
+  position: relative;
+  width: 400px;
+  height: 200px;
 }
 </style>
