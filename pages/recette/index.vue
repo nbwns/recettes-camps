@@ -63,11 +63,8 @@
                             <strong>Quantité</strong>
                         </div>
                         <div class="column">
-                            <strong>Prix indicatif 
-                                    <span class="clickable"  @click="modal = true">
-                                        ❓
-                                    </span>
-                            </strong>
+                            <strong>Prix indicatif</strong>
+                             <span class="clickable"  @click="modalPrice = true">🛈</span>
                         </div>
                     </div>
                     <div v-if="recette">
@@ -93,53 +90,77 @@
                     </div>
                 </div>
                 <div class="column">
-                    <h2 class="is-size-4">Préparation</h2>
-                    <div class="pl-5" v-html="procedure" v-if="recette"></div>
-                    <div v-else>
-                        <div class="emptystate emptyline my-2"></div>
-                        <div class="emptystate emptyline my-2"></div>
-                        <div class="emptystate emptyline my-2"></div>
-                        <div class="emptystate emptyline my-2"></div>
-                        <div class="emptystate emptyline my-2"></div>
-                    </div>
-                    <h2 class="is-size-4">Indices assiette écologique</h2>
-                    <div class="block px-2" v-if="recette">
-                        <div class="mb-2" title="Valeur optimale: entre 40 et 60g sec par personne">Céréales 
-                            <meter class="meter is-small"
-                                min="0" max="120"
-                                low="39" high="61" optimum="50"
-                                :value="recette.assietteCereale"/>
-                        </div>
-                        <div class="mb-2" title="Valeur optimale: entre 20 et 30g sec par personne">Légumineuses 
-                            <meter class="meter is-small"
-                                min="0" max="60"
-                                low="19" high="31" optimum="25"
-                                :value="recette.assietteLegumineuse"/>
-                        </div>
-
-                        <div class="mb-2" title="Valeur optimale: 300g par personne">Légumes 
-                            <meter class="meter is-small"
-                                min="0" max="400"
-                                low="150" high="299" optimum="300"
-                                :value="recette.assietteLegume"/>
-                        </div>
-                        <div class="mb-2" title="Viande, fromage, huile, beurre,... Valeur optimale: max 30g par personne">Autre 
-                            <meter class="meter is-small"
-                                min="0" max="95"
-                                low="31" high="89" optimum="30"
-                                :value="recette.assietteAutre"/>
+                    <div class="block">
+                        <h2 class="is-size-4">Préparation</h2>
+                        <div class="pl-5" v-html="procedure" v-if="recette"></div>
+                        <div v-else>
+                            <div class="emptystate emptyline my-2"></div>
+                            <div class="emptystate emptyline my-2"></div>
+                            <div class="emptystate emptyline my-2"></div>
+                            <div class="emptystate emptyline my-2"></div>
+                            <div class="emptystate emptyline my-2"></div>
                         </div>
                     </div>
-                    <div v-else>
-                        <div class="emptystate emptyline my-2"></div>
-                        <div class="emptystate emptyline my-2"></div>
-                        <div class="emptystate emptyline my-2"></div>
-                        <div class="emptystate emptyline my-2"></div>
+                    <div class="block">
+                        <h2 class="is-size-4">Score assiette écologique</h2>                   
+                        <div class="block px-2" v-if="recette">
+                            <p>Par portion <span class="clickable"  @click="modalEco = true">🛈</span></p>
+                            <table class="table is-size-7">
+                                <tbody>
+                                    <tr>
+                                        <td><strong>Céréales</strong></td>
+                                        <td>{{parseInt(recette.assietteCereale)}}g</td>
+                                        <td>
+                                            <meter class="meter is-small"
+                                            min="0" max="120"
+                                            low="39" high="61" optimum="50"
+                                            :value="recette.assietteCereale"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Légumineuses</strong></td>
+                                        <td>{{parseInt(recette.assietteLegumineuse)}}g</td>
+                                        <td>
+                                            <meter class="meter is-small"
+                                            min="0" max="60"
+                                            low="19" high="31" optimum="25"
+                                            :value="recette.assietteLegumineuse"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Légumes</strong></td>
+                                        <td>{{parseInt(recette.assietteLegume)}}g</td>
+                                        <td>
+                                            <meter class="meter is-small"
+                                            min="0" max="400"
+                                            low="150" high="299" optimum="300"
+                                            :value="recette.assietteLegume"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Autre</strong></td>
+                                        <td>{{parseInt(recette.assietteAutre)}}g</td>
+                                        <td>
+                                            <meter class="meter is-small"
+                                            min="0" max="95"
+                                            low="31" high="89" optimum="30"
+                                            :value="recette.assietteAutre"/>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div v-else>
+                            <div class="emptystate emptyline my-2"></div>
+                            <div class="emptystate emptyline my-2"></div>
+                            <div class="emptystate emptyline my-2"></div>
+                            <div class="emptystate emptyline my-2"></div>
+                        </div>
                     </div>
                 </div>
             </div>            
             </div>
-            <div class="modal" :class="{'is-active': modal}">
+            <div class="modal" :class="{'is-active': modalPrice}">
             <div class="modal-background"></div>
             <div class="modal-content">
                 <article class="message is-info">
@@ -151,7 +172,26 @@
                     </div>
                     </article>
             </div>
-            <button class="modal-close is-large" aria-label="close" @click="modal=false"></button>
+            <button class="modal-close is-large" aria-label="close" @click="modalPrice=false"></button>
+            </div>
+            <div class="modal" :class="{'is-active': modalEco}">
+            <div class="modal-background"></div>
+            <div class="modal-content">
+                <article class="message is-info">
+                    <div class="message-header">
+                        <p>Score écologique</p>
+                    </div>
+                    <div class="message-body">
+                        <ul>
+                            <li><strong>Céréales:</strong> Valeur optimale entre 40 et 60g sec par personne</li>
+                            <li><strong>Légumineuses:</strong> Valeur optimale entre 20 et 30g sec par personne</li>
+                            <li><strong>Légumes:</strong> Valeur optimale au moins 300g par personne</li>
+                            <li><strong>Autres (Viande, fromage, huile, beurre,...):</strong> Valeur optimale max 30g par personne</li>
+                        </ul>
+                    </div>
+                    </article>
+            </div>
+            <button class="modal-close is-large" aria-label="close" @click="modalEco=false"></button>
             </div>
         </div>
     </div>
@@ -170,7 +210,8 @@ export default {
         return {
             recette: null,
             plates: 0,
-            modal: false,
+            modalPrice: false,
+            modalEco: false,
             menuButton: false
         }
     },

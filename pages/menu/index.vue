@@ -13,7 +13,7 @@
             <div class="level">
               <div>
                 <h2 class="title is-3">Recettes à planifier</h2> 
-                <p class="subtitle is-6">Ta collection de recettes trop miam que tu as envie de cuisiner pendant ton camp. Cette liste est sauvegardée automatiquement dans ton navigateur.</p>  
+                <p class="subtitle is-6">Ta collection de recettes trop miam que tu as envie de cuisiner pendant ton camp. <br/>Cette liste est sauvegardée automatiquement dans ton navigateur.</p>  
               </div>
               <button class="button mt-0" title="Vider la liste des recettes disponibles" @click="unplannedRecipes = []" :disabled="unplannedRecipes.length === 0">🗑️ Vider la liste</button>
             </div>
@@ -42,11 +42,11 @@
             <div class="level">
               <div>
                 <h2 class="title is-3">Calendrier</h2>
-                <p class="subtitle is-6">Le calendrier te permet de planifier ton menu de camp. Tu peux également déplacer des recettes de nouveau dans tes recettes à planifier. Le calendrier est sauvegardé automatiquement dans ton navigateur.</p>  
+                <p class="subtitle is-6">Le calendrier te permet de planifier ton menu de camp. Tu peux également déplacer des recettes de nouveau dans tes recettes à planifier. <br/>Le calendrier est sauvegardé automatiquement dans ton navigateur.</p>  
               </div>
               <div>
                 <button class="button is-primary" @click="shareModal=true" :disabled="menu==null">🔗 Partager</button>
-                <button class="button" title="Recommencer" @click="menu = null" :disabled="menu==null">🗑️ Recommencer</button>
+                <button class="button" title="Recommencer" @click="resetMenu" :disabled="menu==null">🗑️ Recommencer</button>
               </div>
             </div>
             <div class="container" v-if="menu">
@@ -97,7 +97,7 @@
           </div>
           </div>
         </div>
-        <div class="columns">
+        <div class="columns mb-5">
           <div class="column">
             <div class="level">
               <div>
@@ -105,10 +105,17 @@
                 <p class="subtitle is-6">Les menus que tu as sauvegardé en ligne afin de les partager. Ta liste de menus est conservée dans ton navigateur.</p>  
               </div>
             </div>
-            <div>
-              <p v-for="m in savedMenus" :key="m">
-                <nuxt-link  :to="'menu/partage?id='+m">{{m}}</nuxt-link>
+            <div v-if="this.savedMenus != null && this.savedMenus.length > 0">
+              <p v-for="m in savedMenus" :key="m.id">
+                <nuxt-link  :to="'menu/partage?id='+m.id">{{m.name}}</nuxt-link>
               </p>
+            </div>
+            <div v-else>
+              <article class="message is-warning">
+                <div class="message-body">
+                  Tu n'as pas encore partagé de menus
+                </div>
+              </article>
             </div>
           </div>
         </div>
@@ -234,7 +241,7 @@ export default {
               console.log(this.shareId)
               this.sendingData = false;
               this.shareModal = false;
-              this.$store.commit('addToSavedMenus', this.shareId);
+              this.$store.commit('addToSavedMenus', {name: this.menuName, id:this.shareId});
               this.$toast.show('👍 Menu sauvegardé ', { 
                 theme: "bubble", 
                 position: "top-center", 
@@ -249,6 +256,11 @@ export default {
                 ]
                 });
           })
+      },
+      resetMenu(){
+        let plannedRecipes = Object.values(this.menu).flat();
+        this.$store.commit('addToUnplannedRecipes', plannedRecipes);
+        this.menu = null;
       },
       notifySave(){
         this.$toast.show('💾 Sauvegardé', { 

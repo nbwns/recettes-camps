@@ -6,7 +6,7 @@ export default {
 
   // Global page headers (https://go.nuxtjs.dev/config-head)
   head: {
-    title: 'Super Intendant',
+    title: 'Super Intendance',
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
@@ -56,6 +56,17 @@ export default {
 
   // Axios module configuration (https://go.nuxtjs.dev/config-axios)
   axios: {},
+
+  pwa: {
+    manifest: {
+      name: 'Super Intendance',
+      lang: 'fr',
+      useWebmanifestExtension: false
+    },
+    icon: {
+      fileName: 'icon.png'
+    }
+  },
 
   // Content module configuration (https://go.nuxtjs.dev/config-content)
   content: {},

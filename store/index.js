@@ -10,7 +10,12 @@ export const state = () => ({
   
   export const mutations = {
     addToUnplannedRecipes(state, recipe){
-        state.unplannedRecipes.push(recipe);
+        if(recipe.length){
+            state.unplannedRecipes.push(...recipe);
+        }
+        else{
+            state.unplannedRecipes.push(recipe);
+        }
     },
     updateUnplannedRecipes(state, value){
         state.unplannedRecipes = value;

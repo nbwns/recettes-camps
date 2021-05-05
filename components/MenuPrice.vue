@@ -1,7 +1,7 @@
 <template>
   <div>
       Budget: 
-      <div class="tag is-rounded is-large clickable" @click="active=true">
+      <div class="tag is-rounded is-large clickable transition" :class="{'is-primary': totalBudget > 0}" @click="active=true">
            <span class="is-size-4">{{totalBudget.toFixed()}}€</span>
       </div>
 
@@ -102,5 +102,11 @@ export default {
 </script>
 
 <style>
+.transition{
+    transition: all 0.3s;
+}
 
+.transition.is-primary{
+    transition: all 0.5s;
+}
 </style>

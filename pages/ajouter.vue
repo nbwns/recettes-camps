@@ -125,7 +125,7 @@
                 <div>
                     <button class="button is-fullwidth" @click="addIngredient">Ajouter un ingrédient</button>
                 </div>
-
+                <div><p class="help">Tu ne trouves pas un produit dans la liste ? <a href="https://airtable.com/shrAXUQUh0KC3FUQn" target="_blank">Soumet-le nous</a> et nous l'ajouterons rapidement</p></div>
                 <div class="field">
                     <label class="label">Remarques</label>
                     <div class="control">
@@ -242,7 +242,7 @@ export default {
             method: "post",
             data: {
             query: `{
-                  ingredients(_order_by: "nom") {
+                  ingredients(_order_by: "nom", etat: "Validé") {
                         id
                         nom
                         mesure

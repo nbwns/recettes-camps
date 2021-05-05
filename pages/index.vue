@@ -2,7 +2,7 @@
   <div class="page-wrapper">
       <Header className="is-primary">
             <h1 class="title is-1">
-              Super Intendant
+              Super Intendance
             </h1>
       </Header>
 
@@ -16,32 +16,7 @@
         </div>            
 
         <div class="columns is-multiline  mt-6">
-            <div class="column is-one-quarter" v-for="recette in recettes" :key="recette.slug">
-              <nuxt-link :to="{path: '/recette?id='+recette.id}">
-                <div class="card" >
-                  <div class="card-content">
-                    <p class="title mb-0" 
-                        :class="{'omnivore': recette.diet === 'Omnivore', 'vege': recette.diet === 'Végétarien'}"
-                        :title="recette.diet">
-                      {{recette.nom}} 
-                    </p>
-                     <p class="is-size-7">
-                        Par {{recette.auteur}}
-                      </p>
-                    <div class="content mt-3">
-                      {{recette.introduction}}
-                    </div>
-                  </div>
-                  <footer class="card-footer">
-                    <p class="card-footer-item">
-                      <span>
-                        <button class="button is-primary">Voir la recette</button>
-                      </span>
-                    </p>
-                  </footer>
-                </div>
-              </nuxt-link>
-            </div>
+            <recipe-card v-for="recette in recettes" :key="recette.slug" :recipe="recette"/>
         </div>
       </div>
       <nuxt-link to="ajouter"><div class="fab"> + </div></nuxt-link>
@@ -51,10 +26,12 @@
 <script>
 import axios from "axios"
 import Header from '~/components/Header'
+import RecipeCard from '~/components/RecipeCard'
 
 export default {
   components: {
-      Header
+      Header,
+      RecipeCard
     },
      data () {
         return {
