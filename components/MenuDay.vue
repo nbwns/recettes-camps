@@ -14,7 +14,7 @@
                     group="menu"
                     dragClass="dragged" @end="notifySave" ghostClass="ghost"
                 >
-                    <div class="tag m-2 is-medium grabbable calendar-item" v-for="r in menuDay" :key="r.slug">
+                    <div class="tag m-2 is-medium grabbable calendar-item" v-for="r in menuDay" :key="r.id">
                         <i class="fa fa-ellipsis-v is-size-7"></i><i class="fa fa-ellipsis-v is-size-7 mr-2"></i> {{r.nom}}
                     </div>
                     </draggable>
@@ -75,7 +75,7 @@ export default {
   }
 
   .calendar-item{
-      display: flex;
+      
   }
 
   .ghost{

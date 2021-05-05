@@ -88,6 +88,7 @@
                 <div class="field">
                     <label class="label">Ingrédients</label>
                 </div>
+                <div><p class="help">Tu ne trouves pas un produit dans la liste ? <a href="https://airtable.com/shrAXUQUh0KC3FUQn" target="_blank">Soumet-le nous</a> et recharge la page</p></div>
                 <div class="field is-horizontal" v-for="compo in recette.compositions" :key="compo.id">
                     <div class="field-body">
                         <div class="field">
@@ -125,7 +126,6 @@
                 <div>
                     <button class="button is-fullwidth" @click="addIngredient">Ajouter un ingrédient</button>
                 </div>
-                <div><p class="help">Tu ne trouves pas un produit dans la liste ? <a href="https://airtable.com/shrAXUQUh0KC3FUQn" target="_blank">Soumet-le nous</a> et nous l'ajouterons rapidement</p></div>
                 <div class="field">
                     <label class="label">Remarques</label>
                     <div class="control">
@@ -242,7 +242,7 @@ export default {
             method: "post",
             data: {
             query: `{
-                  ingredients(_order_by: "nom", etat: "Validé") {
+                  ingredients(_order_by: "nom") {
                         id
                         nom
                         mesure

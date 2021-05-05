@@ -59,6 +59,7 @@ export default {
                             assietteLegumineuse
                             contactAuteur
                             auteur
+                            id
                         }
                     }`,
                     }

@@ -17,7 +17,7 @@
               </div>
               <button class="button mt-0" title="Vider la liste des recettes disponibles" @click="unplannedRecipes = []" :disabled="unplannedRecipes.length === 0">🗑️ Vider la liste</button>
             </div>
-            <div class="container" >
+            <div >
               <div class="dashed-slot">
                 <draggable
                   v-model="unplannedRecipes" group="menu" dragClass="dragged" @end="notifySave"  
@@ -28,7 +28,7 @@
                 </draggable>
               </div>
             </div>
-            <div class="container" v-if="unplannedRecipes.length == 0">
+            <div v-if="unplannedRecipes.length == 0">
               <article class="message is-warning mt-5">
                 <div class="message-body">
                   Tu n'as aucune recette à placer dans ton menu. Pour ajouter une recette ici, clique sur "📝 Ajouter au menu" dans les recettes que tu veux planifier.
@@ -49,12 +49,12 @@
                 <button class="button" title="Recommencer" @click="resetMenu" :disabled="menu==null">🗑️ Recommencer</button>
               </div>
             </div>
-            <div class="container" v-if="menu">
+            <div v-if="menu">
               <div class="columns is-multiline mb-5">
                 <MenuDay v-for="(recipes, day) in menu" :key="day" :day="day" :recipes="recipes"  />
               </div>
             </div>
-            <div class="container mb-5" v-else>
+            <div v-else>
               <article class="message is-warning">
                 <div class="message-body">
                   Sélectionne d'abord les dates de ton camp et le nombre de couverts.
@@ -199,7 +199,6 @@ export default {
             return this.$store.state.menu
         },
         set(value){
-          console.log("menu state changes");
           this.$store.commit('updateMenu', value);
         }
       },

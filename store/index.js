@@ -24,6 +24,23 @@ export const state = () => ({
         state.menu = menu;
     },
     updateDay(state, {value, key}){
+        /*let menuServings = state.attendees;
+        let recipes = value;
+        recipes.forEach(r => {
+            let ratio = menuServings / r.nombreDePersonnes;
+            //only recalculate if needed
+            if(ratio !== 1){
+                r.nombreDePersonnes = menuServings
+                //adapt price & quantity based on menu servings
+                r.compositions.forEach(c => {
+                    c.quantite = c.quantite * ratio
+                    c.prix = c.prix * ratio
+                });
+            }
+        });
+        console.log(menuServings, recipes, value)*/
+
+
         state.menu[key] = value;
         state.trigger = value;
     },
@@ -37,5 +54,6 @@ export const state = () => ({
         state.savedMenus = value;
     }
   }
+
 
   

@@ -13,11 +13,7 @@ class BudgetCalculator{
             if(this.menu && this.servings > 0){
                 let allRecipes = Object.values(this.menu).flat();
                 let recipesPrices = allRecipes.map(recipe => {
-                    let ratio = this.servings / recipe.nombreDePersonnes;
-                    let compositionPrices = recipe.compositions.map(c => {
-                        return c.prix * ratio
-                    });
-                    return compositionPrices.reduce(this.reducer);
+                    return this.getRecipeBudget(recipe)
                 });
                 if(recipesPrices.length > 0){
                     this.#totalBudget = recipesPrices.reduce(this.reducer);
@@ -31,6 +27,14 @@ class BudgetCalculator{
         else{
             return this.#totalBudget
         }
+    }
+
+    getRecipeBudget(recipe){
+        let ratio = this.servings / recipe.nombreDePersonnes;
+        let compositionPrices = recipe.compositions.map(c => {
+            return c.prix * ratio
+        });
+        return compositionPrices.reduce(this.reducer);
     }
 
     getBudgetPerServing(){
