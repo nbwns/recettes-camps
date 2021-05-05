@@ -60,11 +60,12 @@ export default {
   pwa: {
     manifest: {
       name: 'Super Intendance',
+      short_name: 'Super Intendance',
       lang: 'fr',
       useWebmanifestExtension: false
     },
     icon: {
-      fileName: 'icon.png'
+      fileName: 'app-icon.png'
     }
   },
 
