@@ -17,7 +17,7 @@
         </div>
     </div>
     <form v-on:submit.prevent="post" class="mb-5">
-      <div class="container" v-if="!ajoutee">
+      <div class="container is-fluid" v-if="!ajoutee">
         <div class="columns">
            
             <div class="column is-half">

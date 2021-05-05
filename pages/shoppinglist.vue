@@ -3,7 +3,7 @@
         <Header>
             <h1 class="title is-1">Ma liste de courses</h1>
         </Header>
-        <div class="container"> 
+        <div class="container is-fluid"> 
             <nav class="level">
                 <div class="level-left">
                 </div>
@@ -20,35 +20,33 @@
                 <div class="message-body ">
                     Il n'y a rien ici ! Tu dois d'abord <nuxt-link to="menu">créer un menu de camp</nuxt-link> 🤓
                 </div>
-                </article>
-            <div class="columns">
-                <div class="column ml-5">
-                    <div v-for="(item, index) in shoppingList" :key="item.ingredient">
-                        <div class="clickable is-size-5 columns mb-0" @click="item.visible = !item.visible" :class="{'has-background-info-light': index % 2 == 1}">
-                            <div class="column">
-                                <i class="fas fa-angle-right" :class="{'expanded': item.visible}" ></i> 
-                                <span>{{item.ingredient}}</span>
-                            </div>
-                            <div class="column">
-                                 <span>{{parseFloat(item.totalQuantity.toFixed(2))}} {{item.unit}}</span>
-                            </div>
-                        </div>
-                        <div v-if="item.visible">
-                            <div class="columns ml-5 mb-0" v-for="r in item.recipes" :key="r.name">
-                                <div class="column">
-                                    {{r.name}}
-                                </div>
-                                <div class="column">
-                                    {{parseFloat(r.quantity.toFixed(1))}} {{r.unit}}
-                                </div>
-                            </div>
-                        </div>
-                        <!--<ul class="ml-5" v-if="item.visible">
-                            <li v-for="r in item.recipes" :key="r.name">{{r.name}} {{parseFloat(r.quantity.toFixed(1))}} {{r.unit}}</li>
-                        </ul>-->
+            </article>
+
+            <div v-for="(item, index) in shoppingList" :key="item.ingredient">
+                <div class="clickable is-size-5 columns is-mobile mb-0" @click="item.visible = !item.visible" :class="{'has-background-info-light': index % 2 == 1}">
+                    <div class="column">
+                        <i class="fas fa-angle-right" :class="{'expanded': item.visible}" ></i> 
+                        <span>{{item.ingredient}}</span>
+                    </div>
+                    <div class="column">
+                            <span>{{parseFloat(item.totalQuantity.toFixed(2))}} {{item.unit}}</span>
                     </div>
                 </div>
+                <div v-if="item.visible">
+                    <div class="columns ml-5 mb-0" v-for="r in item.recipes" :key="r.name">
+                        <div class="column">
+                            {{r.name}}
+                        </div>
+                        <div class="column">
+                            {{parseFloat(r.quantity.toFixed(1))}} {{r.unit}}
+                        </div>
+                    </div>
+                </div>
+                <!--<ul class="ml-5" v-if="item.visible">
+                    <li v-for="r in item.recipes" :key="r.name">{{r.name}} {{parseFloat(r.quantity.toFixed(1))}} {{r.unit}}</li>
+                </ul>-->
             </div>
+                
         </div>
   </div>
 </template>

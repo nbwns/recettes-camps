@@ -9,7 +9,7 @@
             <div class="emptystate emptytitle" v-else>&nbsp;</div>
             </Header>
         
-            <div class="container">  
+            <div class="container is-fluid">  
             <nav class="level">
                 <div class="level-left">
                 </div>
@@ -64,7 +64,7 @@
                         </div>
                         <div class="column">
                             <strong>Prix indicatif</strong>
-                             <span class="clickable"  @click="modalPrice = true">🛈</span>
+                             <span class="clickable"  @click="modalPrice = true"><i class="fa fa-info-circle"></i></span>
                         </div>
                     </div>
                     <div v-if="recette">
@@ -104,7 +104,7 @@
                     <div class="block">
                         <h2 class="is-size-4">Score assiette écologique</h2>                   
                         <div class="block px-2" v-if="recette">
-                            <p>Par portion <span class="clickable"  @click="modalEco = true">🛈</span></p>
+                            <p>Par portion <span class="clickable"  @click="modalEco = true"><i class="fa fa-info-circle"></i></span></p>
                             <table class="table is-size-7">
                                 <tbody>
                                     <tr>

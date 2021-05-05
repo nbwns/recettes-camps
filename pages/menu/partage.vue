@@ -5,7 +5,7 @@
           <div v-else class="emptystate emptytitle"></div>
       </Header>
 
-     <div class="container" v-if="menu">
+     <div class="container is-fluid" v-if="menu">
          <div v-for="(recipes, day) in menu" :key="day">
              {{day}}
              <div v-for="r in recipes" :key="r.nom">

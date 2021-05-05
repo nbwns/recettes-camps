@@ -3,7 +3,7 @@
       <Header>
           <h1 class="title is-1">Mon menu de camp</h1>
       </Header>
-      <div class="container">
+      <div class="container is-fluid">
         <nav class="level">
           <div class="level-left"></div>
           <div class="level-right"><menu-price/></div>
