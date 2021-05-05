@@ -307,7 +307,6 @@ export default {
     height: 1rem;
     overflow: hidden;
     padding: 0;
-    width: 100%;
 }
 
 .meter:-moz-meter-optimum::-moz-meter-bar{
