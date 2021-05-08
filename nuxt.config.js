@@ -61,8 +61,12 @@ export default {
     manifest: {
       name: 'Super Intendance',
       short_name: 'Super Intendance',
-      lang: 'fr',
-      useWebmanifestExtension: false
+      description: 'Te facilite ton intendance durable',
+      orientation: 'portrait',
+      lang: 'fr-BE',
+      useWebmanifestExtension: false,
+      theme_color: '#569aa0',
+      background_color: '#dbe391',
     },
     icon: {
       fileName: 'app-icon.png'

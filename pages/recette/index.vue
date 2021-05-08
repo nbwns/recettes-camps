@@ -2,15 +2,18 @@
     <div>
         <div>
             <Header>
-            <nuxt-link to="/">&lt; Retour</nuxt-link>
-            <h1 class="title is-1 pt-2" v-if="recette">
-                {{recette.nom}}
-            </h1>
+            <nuxt-link to="/" class="no-print">&lt; Retour</nuxt-link>
+            <div class="block" v-if="recette">
+                <h1 class="title is-1 pt-2 mb-0" >
+                    {{recette.nom}}
+                </h1>
+                par <a :href="`mailto:${recette.contactAuteur}&subject=Question sur ta recette de ${recette.nom}`">{{recette.auteur}}</a>
+            </div>
             <div class="emptystate emptytitle" v-else>&nbsp;</div>
             </Header>
         
             <div class="container is-fluid">  
-            <nav class="level">
+            <nav class="level no-print">
                 <div class="level-left">
                 </div>
                 <div class="level-right">
@@ -262,6 +265,7 @@ export default {
                                 nomIngredient
                                 prix
                                 mesure
+                                prixIngredient
                             }
                             prix
                             slug

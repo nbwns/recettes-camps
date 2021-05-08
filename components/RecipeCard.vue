@@ -50,6 +50,7 @@ export default {
                                 nomIngredient
                                 prix
                                 mesure
+                                prixIngredient
                             }
                             prix
                             slug

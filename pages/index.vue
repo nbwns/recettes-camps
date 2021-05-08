@@ -19,7 +19,7 @@
             <recipe-card v-for="recette in recettes" :key="recette.slug" :recipe="recette"/>
         </div>
       </div>
-      <nuxt-link to="ajouter"><div class="fab"> + </div></nuxt-link>
+      <nuxt-link to="recette/ajouter"><div class="fab"> + </div></nuxt-link>
     </div>
 </template>
 

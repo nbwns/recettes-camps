@@ -22,13 +22,13 @@
 
 
        <div class="block">
-           <h2 class="title is-3">Budget</h2>
+           <h2 class="title is-3">💰 Budget</h2>
            <table class="table">
                <thead>
                    <th>Tout le camp</th>
-                   <th>Par personne pour tout le camp</th>
-                   <th>Moyen par jour</th>
-                   <th>Moyen par personne par jour </th>
+                   <th>Par personne</th>
+                   <th>Moyen / jour</th>
+                   <th>Moyen / personne / jour </th>
                </thead>
                <tr>
                    <td class="has-text-right">{{Number(budget.getTotalBudget()).toFixed(2)}}€</td>
@@ -38,8 +38,9 @@
                </tr>
            </table>
        </div>
+       <hr/>
        <div class="block">
-            <h2 class="title is-3">Calendrier</h2>
+            <h2 class="title is-3">📅 Calendrier</h2>
             <div class="columns">
                 <div class="column" v-for="(recipes, day) in menu" :key="day">
                         <strong>{{day}}</strong>
@@ -49,8 +50,9 @@
                     </div>
             </div>
        </div>
+       <hr/>
        <div class="block">
-            <h2 class="title is-3">Recettes</h2>
+            <h2 class="title is-3">🍜 Recettes pour {{attendees}} personnes</h2>
            <div class="block" v-for="r in allRecipes" :key="r.id">
                <h2 class="title is-4">{{r.nom}}</h2>
                <div class="columns">

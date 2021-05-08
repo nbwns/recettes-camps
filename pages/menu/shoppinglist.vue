@@ -10,7 +10,7 @@
                 <div class="level-right">
                     <div class="level-item">
                         <div class="buttons">
-                            <div class="mr-4"><toggle-button @change="viewDetails()"/> <span class="ml-1">Voir les détails</span></div>
+                            <div class="mr-4 no-print"><toggle-button @change="viewDetails()"/> <span class="ml-1">Voir les détails</span></div>
                             <button class="button" @click="print()">🖨️ Imprimer</button>
                         </div>
                     </div>

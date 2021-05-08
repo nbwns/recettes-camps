@@ -72,3 +72,9 @@ a:visited{
     width: 400px;
     height: 150px;
   }
+
+  @media print {
+      .button, .footer, .no-print{
+          display: none;
+      }
+  }
