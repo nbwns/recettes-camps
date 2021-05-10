@@ -44,7 +44,7 @@
                 <h2 class="title is-3">Calendrier</h2>
                 <p class="subtitle is-6">Le calendrier te permet de planifier ton menu de camp. Tu peux également déplacer des recettes de nouveau dans tes recettes à planifier. <br/>Le calendrier est sauvegardé automatiquement dans ton navigateur.</p>  
               </div>
-              <div>
+              <div v-if="menu">
                 <nuxt-link class="button is-primary" to="menu/voir">📃 Voir et partager le menu</nuxt-link>
                 <button class="button" title="Recommencer" @click="resetMenu" :disabled="menu==null">🗑️ Recommencer</button>
               </div>
