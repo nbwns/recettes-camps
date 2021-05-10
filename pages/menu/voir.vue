@@ -14,6 +14,7 @@
             <div class="level-right">
                 <div class="level-item">
                     <div class="buttons">
+                        <button class="button is-primary" @click="shareModal=true" :disabled="menu==null" v-if="!this.$route.query.id">🔗 Partager</button>
                         <button class="button" @click="print()" :disabled="menu === null">🖨️ Imprimer</button>
                     </div>
                 </div>
@@ -80,11 +81,62 @@
                 </div>
                 <div class="column"><div class="block" v-html="markdown(r.procedure)"></div></div>
                </div>
-               
            </div>
 
        </div>
+       <hr/>
+       <div class="block">
+            <nav class="level">
+                <div class="level-left">
+                    <h2 class="title is-3">🛒 Liste de courses</h2>
+                </div>
+                <div class="level-right">
+                    <div class="level-item">
+                        <div class="buttons">
+                            <div class="mr-4 no-print"><toggle-button @change="viewDetails()"/> <span class="ml-1">Voir les détails</span></div>
+                        </div>
+                    </div>
+                </div>
+            </nav> 
+           <shopping-list :list="shoppingList"/>
+       </div>
      </div>
+     <div class="modal" :class="{'is-active': shareModal}">
+        <div class="modal-background"></div>
+        <div class="modal-content">
+            <div class="card">
+              <header class="card-header">
+                <p class="card-header-title">
+                  Partage ton menu !
+                </p>
+              </header>
+              <div class="card-content">
+                  <div class="content">
+                    <p>
+                      Ton menu sera <strong>sauvegardé en ligne</strong> et tu pourras le <strong>partager</strong>. 
+                    </p>
+                    <p>
+                      Quand ton menu changera, tu devras le sauvegarder de nouveau.
+                    </p>
+                    <form  v-on:submit.prevent="shareMenu">
+                      <div class="field">
+                        <label class="label">Nom du menu</label>
+                          <div class="control">
+                              <input class="input" type="text" v-model="menuName" placeholder="Menu du camp d'été de la 97ème" required>
+                          </div>
+                      </div>
+                      <button class="button is-primary" :disabled="sendingData">
+                        <span v-if="!sendingData">☁️ Sauvegarder le menu en ligne</span>
+                        <span v-else>...</span>
+                      </button>
+                      <button class="button" :disabled="sendingData" @click="shareModal=false">Annuler</button>
+                    </form>
+                  </div>
+                </div>
+            </div>
+        </div>
+        <button class="modal-close is-large" aria-label="close" @click="shareModal=false"></button>
+      </div>
   </div>
 </template>
 
@@ -92,17 +144,26 @@
 import Header from '~/components/Header'
 import marked from 'marked'
 import BudgetCalculator from '~/assets/classes/BudgetCalculator'
+import ShoppingListGenerator from '~/assets/classes/ShoppingList'
+import ShoppingList from '~/components/ShoppingList'
 
 export default {
     components: {
-      Header
+      Header,
+      ShoppingList
     },
     data(){
         return {
             attendees: 0,
             menu: null,
             name: null,
-            budget: null
+            budget: null,
+            shoppingList: null,
+            unfold: false,
+            shareModal: false,
+            menuName: null,
+            sendingData: false,
+            shareId: null,
         }
     },
     computed:{
@@ -123,6 +184,12 @@ export default {
         print(){
           window.print();
         },
+        viewDetails(){
+            this.unfold = !this.unfold
+            this.shoppingList.forEach(item => {
+                item.visible = this.unfold;
+            });
+        },
         fetchData(recordId){
             if(recordId && recordId !== ''){
                 return this.$axios("https://hook.integromat.com/sqep1g9vmcrbvt13tfzcjmvv1rcwzods?action=get&id="+ recordId)
@@ -132,12 +199,48 @@ export default {
                     this.menu = result.data.menu;
                     this.name = result.data.name;
                     this.budget = new BudgetCalculator(this.menu,this.attendees);
+                    let sl = new ShoppingListGenerator(this.menu,this.attendees);
+                    this.shoppingList = sl.generate();
                 })
             }
+        },
+        shareMenu(){
+        let shareableMenu = {
+          attendees: this.$store.state.attendees,
+          menu: this.$store.state.menu,
+          name: this.menuName
         }
+
+        this.sendingData = true;
+        this.$axios.post("https://hook.integromat.com/sqep1g9vmcrbvt13tfzcjmvv1rcwzods?action=save&id=" + this.menuName, shareableMenu)
+          .then(response => {
+              this.shareId = response.data.ID;
+              console.log(this.shareId)
+              this.sendingData = false;
+              this.shareModal = false;
+              this.$store.commit('addToSavedMenus', {name: this.menuName, id:this.shareId});
+              this.$toast.show('👍 Menu sauvegardé ', { 
+                theme: "bubble", 
+                position: "top-center", 
+                duration : 5000
+                });
+          })
+      }
     },
     mounted(){
-        return this.fetchData(this.$route.query.id);
+        if(this.$route.query.id){
+            //get a saved menu from the db
+            return this.fetchData(this.$route.query.id);
+        }
+        else{
+            //get the menu from the store
+            this.attendees = this.$store.state.attendees;
+            this.menu = this.$store.state.menu;
+            this.name = "Récapitulatif de mon menu";
+            this.budget = new BudgetCalculator(this.menu,this.attendees);
+            let sl = new ShoppingListGenerator(this.menu,this.attendees);
+            this.shoppingList = sl.generate();
+        }
     }
 }
 </script>

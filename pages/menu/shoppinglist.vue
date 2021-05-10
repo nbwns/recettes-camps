@@ -22,38 +22,19 @@
                 </div>
             </article>
 
-            <div v-for="(item, index) in shoppingList" :key="item.ingredient">
-                <div class="clickable is-size-5 columns is-mobile mb-0" @click="item.visible = !item.visible" :class="{'has-background-info-light': index % 2 == 1}">
-                    <div class="column">
-                        <i class="fas fa-angle-right" :class="{'expanded': item.visible}" ></i> 
-                        <span>{{item.ingredient}}</span>
-                    </div>
-                    <div class="column">
-                            <span>{{parseFloat(item.totalQuantity.toFixed(2))}} {{item.unit}}</span>
-                    </div>
-                </div>
-                <div v-if="item.visible">
-                    <div class="columns ml-5 mb-0" v-for="r in item.recipes" :key="r.name">
-                        <div class="column">
-                            {{r.name}}
-                        </div>
-                        <div class="column">
-                            {{parseFloat(r.quantity.toFixed(1))}} {{r.unit}}
-                        </div>
-                    </div>
-                </div>
-                <!--<ul class="ml-5" v-if="item.visible">
-                    <li v-for="r in item.recipes" :key="r.name">{{r.name}} {{parseFloat(r.quantity.toFixed(1))}} {{r.unit}}</li>
-                </ul>-->
-            </div>
-                
+            <shopping-list :list="shoppingList"/>
         </div>
   </div>
 </template>
 
 <script>
-import ShoppingList from '~/assets/classes/ShoppingList'
+import ShoppingListGenerator from '~/assets/classes/ShoppingList'
+import ShoppingList from '~/components/ShoppingList'
+
 export default {
+    components: {
+        ShoppingList
+    },
     data(){
         return {
             shoppingList: {},
@@ -72,9 +53,8 @@ export default {
         }
     },
     mounted(){
-        let sl = new ShoppingList(this.$store.state.menu, this.$store.state.attendees);
+        let sl = new ShoppingListGenerator(this.$store.state.menu, this.$store.state.attendees);
         this.shoppingList = sl.generate();
-        console.log(this.shoppingList);
     }
 }
 </script>

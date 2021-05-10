@@ -75,7 +75,7 @@ export default {
   }
 
   .calendar-item{
-      
+      display: block;
   }
 
   .ghost{

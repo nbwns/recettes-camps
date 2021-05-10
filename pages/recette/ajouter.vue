@@ -24,7 +24,9 @@
                 <article class="message is-warning">
                     <div class="message-body">
                         <p>⚠️ La recette doit être un <strong>plat complet</strong> auquel il ne faut rien ajouter.</p>
-                        <p>Si la recette s'accompagne par exemple de pain ou de riz, veuillez l'ajouter dans les ingrédients.</p>
+                        <p>Si la recette s'accompagne par exemple de pain ou de riz, tu dois l'ajouter dans les ingrédients.</p>
+                        <br/>
+                        <p><strong>Les quantités à indiquer sont pour des adultes</strong></p>
                     </div>
                 </article>
 
@@ -39,7 +41,7 @@
                 <div class="field">
                     <label class="label">Courte description de la recette</label>
                     <div class="control">
-                        <input class="input" type="text" placeholder="C'est super facile et les animés adorent !" v-model="recette.introduction" required="required">
+                        <input class="input" type="text" placeholder="C'est super facile et les animés adorent !" v-model="recette.introduction">
                     </div>
                     <p class="help">Pour donner envie de la consulter</p>
                 </div>
@@ -72,7 +74,7 @@
                 </div>
 
                 <div class="field">
-                    <label class="label">Nombre de couverts</label>
+                    <label class="label">Nombre de couverts (en adultes)</label>
                     <div class="control">
                         <input class="input" type="number" placeholder="5" v-model="recette.couverts" required>
                     </div>
@@ -136,7 +138,10 @@
 
                 <div class="field">
                     <div class="control">
-                        <button class="button is-primary" type="submit">Envoyer</button>
+                        <button class="button is-primary" type="submit" :disabled="sending">
+                            <span v-if="!sending">Envoyer la recette</span>
+                            <span v-else>...</span>
+                        </button>
                     </div>
                     <p class="help">La recette sera immédiatement ajoutée à la base de données.</p>
                 </div>
@@ -190,7 +195,8 @@ export default {
             ingredients: [],
             ajoutee: false,
             slug: null,
-            recordId: null
+            recordId: null,
+            sending: false
         }
     },
     methods:{
@@ -216,11 +222,13 @@ export default {
         },
         post(){
             if(this.validate()){
+                this.sending = true;
                 axios.post("https://hook.integromat.com/rh9d6t7q8kxjiam2mx48q7d11ts00afs", this.recette)
                 .then(response => {
                     this.slug = response.data.slug;
                     this.recordId = response.data.id;
                     this.ajoutee = true;
+                    this.sending = false;
                 })
             }
             else{
