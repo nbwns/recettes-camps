@@ -73,9 +73,9 @@
                     <div v-if="recette">
                         <div v-for="compo in recette.compositions" :key="compo.nom" class="columns m-0 p-0 is-mobile">
                             <div class="column">
-                                {{Math.floor(compo.quantite * plateRatio)}} {{compo.unites}} {{compo.nomIngredient[0]}}
+                                {{Math.round((compo.quantite * plateRatio)*1000)/1000}} {{compo.unites}} {{compo.nomIngredient[0]}}
                             </div>
-                            <div class="column">
+                            <div class="column" :class="{'has-text-danger' : compo.prixManquant == 1}" :title="(compo.prixManquant == 1) ? 'Le prix de cet ingrédient n\'est pas encore encodé, cela peut fausser le calcul du budget' : ''">
                                 {{ (compo.prix * plateRatio).toFixed(2) }} €
                             </div>
                         </div>
@@ -226,6 +226,13 @@ export default {
             return this.plates / this.recette.nombreDePersonnes;
         }
     },
+    watch:{
+        plates(newValue, oldValue){
+            if(newValue < 0){
+                this.plates = 0
+            }
+        }
+    },
     methods:{
       addToUnplannedRecipes(recette){
           this.$store.commit('addToUnplannedRecipes', recette);
@@ -266,6 +273,7 @@ export default {
                                 prix
                                 mesure
                                 prixIngredient
+                                prixManquant
                             }
                             prix
                             slug

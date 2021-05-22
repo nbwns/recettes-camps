@@ -51,6 +51,7 @@ export default {
                                 prix
                                 mesure
                                 prixIngredient
+                                prixManquant
                             }
                             prix
                             slug

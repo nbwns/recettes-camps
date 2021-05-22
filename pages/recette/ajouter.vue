@@ -105,7 +105,7 @@
                         </div>
                         <div class="field" v-if="compo.ingredient">
                             <p class="control">
-                                <input class="input" type="number" placeholder="800" v-model="compo.quantite" required>
+                                <input class="input" type="number" placeholder="800" step=".01" v-model="compo.quantite" required>
                             </p>
                         </div>
                         <div class="field" v-if="compo.ingredient">
@@ -232,7 +232,7 @@ export default {
                 })
             }
             else{
-                console.log("boom")
+                alert("Certains champs semblent vides, vérifie tes données - il ne faut pas d'ingrédients vides")
             }
         },
         validate(){
