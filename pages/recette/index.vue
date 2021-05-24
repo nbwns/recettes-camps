@@ -28,7 +28,7 @@
             </nav>
             
 
-            <div class="columns" v-if="recette && recette.description">
+            <div class="columns" v-if="recette && recette.description != null">
                 <div class="column">
                     <article class="message is-info">
                         <div class="message-body">
@@ -37,13 +37,6 @@
                     </article>
                 </div>
             </div>  
-            <div class="columns">
-                <div class="column is-half">
-                     
-                </div>
-                
-            </div>
-           
             <div class="columns">
                 <div class="column">
                     <h2 class="is-size-4">Ingrédients</h2>

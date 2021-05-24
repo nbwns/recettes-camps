@@ -99,21 +99,4 @@ export default {
    box-shadow: 0 6px 14px 0 #666;
    transform: scale(1.05);
 }
-
-.omnivore::after {
-  content: "🍖";
-  font-size: 1rem;
-  position: absolute;
-  top: 17px;
-  left: 280px;
-}
-
-.vege::after {
-  content: "🥕";
-  font-size: 1rem;
-  position: absolute;
-  top: 17px;
-  left: 280px;
-}
-
 </style>

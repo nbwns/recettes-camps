@@ -1,5 +1,4 @@
 <template>
-  
 <div>
     <Header>
         <h1 class="title is-1">
@@ -150,13 +149,7 @@
         </div>
     </div>
     </form>
-        
-      
-
 </div>
-
-
-
 </template>
 
 <script>

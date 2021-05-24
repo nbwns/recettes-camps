@@ -2,17 +2,17 @@
     <div class="column is-one-quarter" >
         <div class="card" >
             <div class="card-content">
-            <p class="title mb-0" 
-                :class="{'omnivore': recipe.diet === 'Omnivore', 'vege': recipe.diet === 'Végétarien'}"
-                :title="recipe.diet">
-                {{recipe.nom}} 
-            </p>
-                <p class="is-size-7">
-                Par {{recipe.auteur}}
+                <p class="title mb-0" 
+                    :class="{'omnivore': recipe.diet === 'Omnivore', 'vege': recipe.diet === 'Végétarien'}"
+                    :title="recipe.diet">
+                    {{recipe.nom}} 
                 </p>
-            <div class="content mt-3">
-                {{recipe.introduction}}
-            </div>
+                <p class="is-size-7">
+                par {{recipe.auteur}}
+                </p>
+                <div class="content mt-3">
+                    {{recipe.introduction}}
+                </div>
             </div>
             <footer class="card-footer">
             <p class="card-footer-item">
@@ -90,5 +90,19 @@ export default {
 </script>
 
 <style>
+.omnivore::after {
+  content: "🍖";
+  font-size: 1rem;
+  position: absolute;
+  top: 17px;
+  left: 280px;
+}
 
+.vege::after {
+  content: "🥕";
+  font-size: 1rem;
+  position: absolute;
+  top: 17px;
+  left: 280px;
+}
 </style>
