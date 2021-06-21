@@ -38,7 +38,9 @@ export default {
   buildModules: [
     // https://go.nuxtjs.dev/eslint
     //'@nuxtjs/eslint-module'
-    '@nuxtjs/google-analytics'
+    ['@nuxtjs/google-analytics', {
+      id: 'G-K0PVGSRVY5'
+    }]
   ],
 
   // Modules (https://go.nuxtjs.dev/config-modules)
@@ -79,10 +81,6 @@ export default {
 
   toast: {
     position: 'bottom-center'
-  },
-
-  googleAnalytics: {
-    id: 'G-K0PVGSRVY5'
   },
 
   // Build Configuration (https://go.nuxtjs.dev/config-build)
