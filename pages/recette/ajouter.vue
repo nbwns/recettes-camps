@@ -131,7 +131,7 @@
                     </div>
                 </div>
                 <div>
-                    <button class="button is-fullwidth" @click="addIngredient">Ajouter un ingrédient</button>
+                    <button class="button is-fullwidth" @click.stop.prevent="addIngredient" >Ajouter un ingrédient</button>
                 </div>
                 <div class="field">
                     <label class="label">Remarques</label>
@@ -220,6 +220,7 @@ export default {
             }
         },
         post(){
+            console.log("post")
             if(this.validate()){
                 this.sending = true;
                 axios.post("https://hook.integromat.com/rh9d6t7q8kxjiam2mx48q7d11ts00afs", this.recette)
