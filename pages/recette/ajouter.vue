@@ -89,7 +89,13 @@
                 <div class="field">
                     <label class="label">Ingrédients</label>
                 </div>
-                <div><p class="help">Tu ne trouves pas un produit dans la liste ? <a href="https://airtable.com/shrAXUQUh0KC3FUQn" target="_blank">Soumet-le nous</a> et ensuite <a href="#" @click="fetchIngredients(); return false;">recharge la liste des ingrédients</a></p></div>
+                <div class="mb-2">
+                    <article class="message is-info">
+                        <div class="message-body">
+                            <p class="help">💡 Tu ne trouves pas un produit dans la liste ? <a href="https://airtable.com/shrAXUQUh0KC3FUQn" target="_blank">Soumet-le nous</a> et ensuite <a href="#" @click="fetchIngredients(); return false;">recharge la liste des ingrédients</a></p>
+                        </div>
+                    </article>
+                </div>
                 <div class="field is-horizontal" v-for="compo in recette.compositions" :key="compo.id">
                     <div class="field-body">
                         <div class="field">
