@@ -92,7 +92,7 @@
                 <div class="mb-2">
                     <article class="message is-info">
                         <div class="message-body">
-                            <p class="help">💡 Tu ne trouves pas un produit dans la liste ? <a href="https://airtable.com/shrAXUQUh0KC3FUQn" target="_blank">Soumet-le nous</a> et ensuite <a href="#" @click="fetchIngredients(); return false;">recharge la liste des ingrédients</a></p>
+                            <p class="help">💡 Tu ne trouves pas un produit dans la liste ? <a href="https://airtable.com/shrAXUQUh0KC3FUQn" target="_blank">Soumet-le nous via ce formulaire</a> et ensuite <a href="#" @click.stop.prevent="refreshList()"><strong>recharge la liste des ingrédients</strong></a></p>
                         </div>
                     </article>
                 </div>
@@ -243,7 +243,17 @@ export default {
             });
             return valid;
         },
-        fetchIngredients(){
+        refreshList(){
+            this.fetchIngredients(() => {
+                this.$toast.show('👍 Liste mise à jour', { 
+                theme: "bubble", 
+                position: "top-center", 
+                duration : 1550
+            });
+            } );
+            
+        },
+        fetchIngredients(callback){
             return axios({
                 url: "https://api.baseql.com/airtable/graphql/apptVpg9XpET0IEyv",
                 method: "post",
@@ -259,6 +269,7 @@ export default {
             }).then((result) => {
                 this.ingredients = result.data.data.ingredients;
             })
+            .then(callback);
         }
     },
     mounted(){
