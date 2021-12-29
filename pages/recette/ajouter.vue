@@ -255,7 +255,7 @@ export default {
         },
         fetchIngredients(callback){
             return axios({
-                url: "https://api.baseql.com/airtable/graphql/apptVpg9XpET0IEyv",
+                url: this.$config.baseqlURL,
                 method: "post",
                 data: {
                     query: `{

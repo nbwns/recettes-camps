@@ -34,6 +34,10 @@ export default {
   // Auto import components (https://go.nuxtjs.dev/config-components)
   components: true,
 
+  publicRuntimeConfig: {
+    baseqlURL: "https://api.baseql.com/airtable/graphql/apptVpg9XpET0IEyv"
+  },
+
   // Modules for dev and build (recommended) (https://go.nuxtjs.dev/config-modules)
   buildModules: [
     // https://go.nuxtjs.dev/eslint
@@ -98,7 +102,7 @@ export default {
     /*routes(){
       console.log("generate")
       let recettes = axios({
-        url: "https://api.baseql.com/airtable/graphql/apptVpg9XpET0IEyv",
+        url: process.env.BASEQL_URL,
         method: "post",
         data: {
           query: `{
