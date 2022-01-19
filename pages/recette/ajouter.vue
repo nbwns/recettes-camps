@@ -22,7 +22,7 @@
             <div class="column is-half">
                 <article class="message is-warning">
                     <div class="message-body">
-                        <p>⚠️ La recette doit être un <strong>plat complet</strong> auquel il ne faut rien ajouter.</p>
+                        <p>La recette doit être un idéalement <strong>plat complet</strong> auquel il ne faut rien ajouter.</p>
                         <p>Si la recette s'accompagne par exemple de pain ou de riz, tu dois l'ajouter dans les ingrédients.</p>
                         <br/>
                         <p><strong>Les quantités à indiquer sont pour des adultes</strong></p>
@@ -37,7 +37,7 @@
                     </div>
                 </div>
 
-                <div class="field">
+                <div class="field mt-5">
                     <label class="label">Courte description de la recette</label>
                     <div class="control">
                         <input class="input" type="text" placeholder="C'est super facile et les animés adorent !" v-model="recette.introduction">
@@ -45,14 +45,14 @@
                     <p class="help">Pour donner envie de la consulter</p>
                 </div>
 
-                <div class="field">
+                <div class="field mt-5">
                     <label class="label">Auteur</label>
                     <div class="control">
                         <input class="input" type="text" placeholder="97ème de Saint-Glinglin" v-model="recette.auteur" required="required">
                     </div>
                 </div>
 
-                <div class="field">
+                <div class="field mt-5">
                     <label class="label">E-mail de l'auteur</label>
                     <div class="control">
                         <input class="input" type="email" placeholder="97saintglinglin@gmail.com" v-model="recette.contactAuteur" required="required">
@@ -60,7 +60,7 @@
                     <p class="help">Adresse à laquelle on peut vous contacter en cas de questions sur la recette</p>
                 </div>
 
-                <div class="field">
+                <div class="field mt-5">
                     <label class="label">Type</label>
                     <div class="control">
                         <div class="select">
@@ -72,29 +72,22 @@
                     </div>
                 </div>
 
-                <div class="field">
+                <div class="field mt-5">
                     <label class="label">Nombre de couverts (en adultes)</label>
                     <div class="control">
                         <input class="input" type="number" placeholder="5" v-model="recette.couverts" required>
                     </div>
                 </div>
 
-                <div class="field">
+                <div class="field mt-5">
                     <label class="label">Procédure</label>
                     <div class="control">
                         <textarea class="textarea" placeholder="1. Eplucher les pommes de terre" v-model="recette.procedure" required></textarea>
                     </div>
                 </div>
 
-                <div class="field">
+                <div class="field mt-5">
                     <label class="label">Ingrédients</label>
-                </div>
-                <div class="mb-2">
-                    <article class="message is-info">
-                        <div class="message-body">
-                            <p class="help">💡 Tu ne trouves pas un produit dans la liste ? <a href="https://airtable.com/shrAXUQUh0KC3FUQn" target="_blank">Soumet-le nous via ce formulaire</a> et ensuite <a href="#" @click.stop.prevent="refreshList()"><strong>recharge la liste des ingrédients</strong></a></p>
-                        </div>
-                    </article>
                 </div>
                 <div class="field is-horizontal" v-for="compo in recette.compositions" :key="compo.id">
                     <div class="field-body">
@@ -105,6 +98,11 @@
                                     label="nom" 
                                     v-model="compo.ingredient"
                                     @input="ingredient => updateUnit(compo, ingredient.mesure)">
+										<template v-slot:no-options="{ searching }">
+											<template v-if="searching">
+												Ce produit ne figure pas encore dans cette liste. Ajoute-le tout de suite en cliquant sur "Ajouter un produit"
+											</template>
+										</template>
                                 </v-select>
                             </p>
                         </div>
@@ -131,9 +129,13 @@
                     </div>
                 </div>
                 <div>
-                    <button class="button is-fullwidth" @click.stop.prevent="addIngredient" >Ajouter un ingrédient</button>
+                    <button class="button is-fullwidth is-light" @click.stop.prevent="addIngredient" >Ajouter un ingrédient</button>
                 </div>
-                <div class="field">
+				<div class="mt-2">
+                    <hr/>
+					<button class="button is-fullwidth" @click.stop.prevent="showModal=true" >Ajouter un produit</button>
+				</div>
+                <div class="field mt-5">
                     <label class="label">Remarques</label>
                     <div class="control">
                         <textarea class="textarea" placeholder="Vous pouvez réutiliser les restes le lendemain en les transformant en gnocchis" v-model="recette.description"></textarea>
@@ -155,6 +157,75 @@
         </div>
     </div>
     </form>
+	<div class="modal" :class="{'is-active': showModal}">
+        <div class="modal-background"></div>
+        <div class="modal-content">
+            <div class="card">
+              <header class="card-header">
+                <p class="card-header-title">
+                  Ajoute un produit
+                </p>
+              </header>
+              <div class="card-content">
+                  <div class="content">
+					<small>Tous les champs sont requis</small>
+                    <form  v-on:submit.prevent="sendProduct">
+                      <div class="field mt-5">
+							<label class="label">Nom du produit</label>
+							<div class="control">
+								<input class="input" type="text" v-model="newProduct.name" placeholder="abricot" required>
+							</div>
+					  </div>
+					  <div class="field mt-5">
+                        	<label class="label">Ce produit se mesure-t-il en poids, volume ou unité ?</label>
+							<div class="control">
+								<label class="radio">
+									<input type="radio" name="Measure" value="Masse" v-model="newProduct.measure" required>
+									Masse (kilos)
+								</label>
+								<label class="radio">
+									<input type="radio" name="Measure" value="Volume" v-model="newProduct.measure" required>
+									Volume (litres)
+								</label>
+						</div>
+						<div class="field mt-5">
+                        	<label class="label">Quelle est la catégorie de ce produit ?</label>
+							<div class="select">
+								<select v-model="newProduct.category" required>
+									<option value="Fruits">Fruit</option>
+									<option value="Légumes">Légume</option>
+									<option value="Boucherie">Viande</option>
+									<option value="Produits laitier">Produit laitier</option>
+									<option value="Conserves">Conserve</option>
+									<option value="Epicerie">Epicerie (épices, huiles,...)</option>
+								</select>
+							</div>
+						</div>
+						<div class="field mt-5">
+                        	<label class="label">Quelle est sa place dans l'assiette écologique ?</label>
+							<div class="select">
+								<select v-model="newProduct.ecoPlateCategory" required>
+									<option value="Céréale">Céréale</option>
+									<option value="Légumineuse sèche">Légumineuse sèche</option>
+									<option value="Légumineuse cuite">Légumineuse cuite</option>
+									<option value="Légume">Légume ou fruit</option>
+									<option value="Autre">Autre (viande, fromage, huile, épice,...)</option>
+								</select>
+							</div>
+						</div>
+                      </div>
+                      <button class="button is-primary" :disabled="sendingNewProduct">
+                        <span v-if="!sendingNewProduct">Ajouter le produit à la liste</span>
+                        <span v-else><em>Ajout en cours</em></span>
+                      </button>
+                      <button class="button" :disabled="sendingNewProduct" @click="showModal=false">Annuler</button>
+                    </form>
+                  </div>
+                </div>
+            </div>
+        </div>
+        <button class="modal-close is-large" aria-label="close" @click="showModal=false"></button>
+      </div>
 </div>
 </template>
 
@@ -193,6 +264,14 @@ export default {
             },
             ingredients: [],
             ajoutee: false,
+			showModal: false,
+			newProduct: {
+				name: null,
+				measure: null,
+				category: null,
+				ecoPlateCategory: null
+			},
+			sendingNewProduct: false,
             slug: null,
             recordId: null,
             sending: false
@@ -219,8 +298,23 @@ export default {
                 this.recette.compositions.splice(itemIndex,1)
             }
         },
+		sendProduct(){
+			this.sendingNewProduct = true;
+			axios.post("https://hook.integromat.com/fh6smvomecrlrl4xg6mdhosto4m7i9ex", this.newProduct)
+                .then(response => {
+                    this.sendingNewProduct = false;
+					this.newProduct = {
+						name: null,
+						measure: null,
+						category: null,
+						ecoPlateCategory: null
+					};
+					this.fetchIngredients(() => {
+						this.showModal = false;
+					});
+                })
+		},
         post(){
-            console.log("post")
             if(this.validate()){
                 this.sending = true;
                 axios.post("https://hook.integromat.com/rh9d6t7q8kxjiam2mx48q7d11ts00afs", this.recette)
@@ -242,16 +336,6 @@ export default {
                 valid = valid && (c.ingredient && c.unite && c.quantite);
             });
             return valid;
-        },
-        refreshList(){
-            this.fetchIngredients(() => {
-                this.$toast.show('👍 Liste mise à jour', { 
-                theme: "bubble", 
-                position: "top-center", 
-                duration : 1550
-            });
-            } );
-            
         },
         fetchIngredients(callback){
             return axios({
