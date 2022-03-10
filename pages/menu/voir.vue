@@ -14,8 +14,14 @@
             <div class="level-right">
                 <div class="level-item">
                     <div class="buttons">
-                        <button class="button is-primary" @click="shareModal=true" :disabled="menu==null" v-if="!this.$route.query.id">🔗 Partager</button>
-                        <button class="button" @click="print()" :disabled="menu === null">🖨️ Imprimer</button>
+                        <button class="button is-primary" @click="shareModal=true" :disabled="menu==null" v-if="!this.$route.query.id && !this.menuUrl">🔗 Partager</button>
+                         <span class="control has-icons-right" v-if="!this.$route.query.id && this.menuUrl">
+						 	<input class="input" type="text" v-model="menuUrl" readonly>
+							 <span class="icon is-small is-right is-clickable" style="pointer-events:all">
+								<i class="fas fa-copy" title="Copier dans le presse-papier" @click="copyToClipboard"></i>
+							</span>
+						 </span>
+						<button class="button" @click="print()" :disabled="menu === null">🖨️ Imprimer</button>
                     </div>
                 </div>
             </div>
@@ -162,6 +168,7 @@ export default {
             unfold: false,
             shareModal: false,
             menuName: null,
+			menuUrl: null,
             sendingData: false,
             shareId: null,
         }
@@ -205,30 +212,54 @@ export default {
             }
         },
         shareMenu(){
-        let shareableMenu = {
-          attendees: this.$store.state.attendees,
-          menu: this.$store.state.menu,
-          name: this.menuName
-        }
+			let shareableMenu = {
+				attendees: this.$store.state.attendees,
+				menu: this.$store.state.menu,
+				name: this.menuName
+			}
 
-        this.sendingData = true;
-        this.$axios.post("https://hook.integromat.com/sqep1g9vmcrbvt13tfzcjmvv1rcwzods?action=save&id=" + this.menuName, shareableMenu)
-          .then(response => {
-              this.shareId = response.data.ID;
-              console.log(this.shareId)
-              this.sendingData = false;
-              this.shareModal = false;
-              this.$store.commit('addToSavedMenus', {name: this.menuName, id:this.shareId});
-              this.$toast.show('👍 Menu sauvegardé ', { 
-                theme: "bubble", 
-                position: "top-center", 
-                duration : 5000
-                });
-          })
-      }
+			this.sendingData = true;
+			this.$axios.post("https://hook.integromat.com/sqep1g9vmcrbvt13tfzcjmvv1rcwzods?action=save&id=" + this.menuName, shareableMenu)
+			.then(response => {
+				this.shareId = response.data.ID;
+				console.log(this.shareId)
+				this.sendingData = false;
+				this.shareModal = false;
+				this.menuUrl = `${window.location.origin}/menu/voir?id=${this.shareId}`;
+				this.$store.commit('addToSavedMenus', {name: this.menuName, id:this.shareId});
+				this.$toast.show('👍 Menu sauvegardé ', { 
+					theme: "bubble", 
+					position: "top-center", 
+					duration : 1500,
+					action : [
+					{
+						text : 'Voir',
+						onClick : (e, toastObject) => {
+							this.$router.push({ path: `/menu/voir?id=${this.shareId}` })
+						}
+					}
+					]
+				});
+			});
+      	},
+		copyToClipboard(){
+			navigator.clipboard.writeText(this.menuUrl).then(() => {
+				this.$toast.show('Copié dans le presse-papier', { 
+					theme: "bubble", 
+					position: "top-center", 
+					duration : 1000
+				});
+			},() => {
+				this.$toast.show('Oups, ça n\'a pas marché', { 
+					theme: "bubble", 
+					position: "top-center", 
+					duration : 1000
+				});
+			});
+		}
     },
     mounted(){
-        if(this.$route.query.id){
+		if(this.$route.query.id){
             //get a saved menu from the db
             return this.fetchData(this.$route.query.id);
         }

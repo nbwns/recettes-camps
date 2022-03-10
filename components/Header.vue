@@ -18,6 +18,7 @@
                                 <nuxt-link class="navbar-item" to="/">Les recettes</nuxt-link>
                                 <nuxt-link class="navbar-item" to="/menu">Mon menu de camp</nuxt-link>
                                 <nuxt-link class="navbar-item" to="/menu/shoppinglist">Ma liste de courses</nuxt-link>
+                                <nuxt-link class="navbar-item" to="/recette/ajouter">Ajouter une recette</nuxt-link>
                             </div>
                         </div>
 

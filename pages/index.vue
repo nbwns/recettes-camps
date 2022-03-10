@@ -17,9 +17,25 @@
 
         <div class="columns is-multiline  mt-6">
             <recipe-card v-for="recette in recettes" :key="recette.slug" :recipe="recette"/>
+			<div class="column is-one-quarter" v-if="!loading" >
+				<div class="card has-background-primary" >
+					<div class="card-content">
+						<p class="title mb-0 has-text-white">Ajoute ta recette</p>
+						<div class="content mt-3 has-text-white">
+							Fais découvrir ta meilleure recette aux autres unités en l'ajoutant à Super Intendance
+						</div>
+					</div>
+					<footer class="card-footer">
+						<p class="card-footer-item">
+							<nuxt-link to="/recette/ajouter">
+								<button class="button">Ajouter une recette</button>
+							</nuxt-link>
+						</p>
+						</footer>
+				</div>
+			</div>
         </div>
       </div>
-      <nuxt-link to="recette/ajouter"><div class="fab"> + </div></nuxt-link>
     </div>
 </template>
 
