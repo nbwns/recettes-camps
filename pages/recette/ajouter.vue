@@ -1,6 +1,6 @@
 <template>
 <div>
-    <Header>
+    <Header className="is-primary">
         <h1 class="title is-1">
             Ajouter une recette
         </h1>

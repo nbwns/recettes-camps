@@ -1,21 +1,20 @@
 <template>
   <div class="page-wrapper">
       <Header className="is-primary">
-            <h1 class="title is-1">
-              Super Intendance
-            </h1>
       </Header>
 
       <div class="container content-wrapper">
-      
-        <div class="columns is-multiline  mt-6" v-if="loading">
+		<h2 class="title is-2 mt-4">
+			Les recettes
+		</h2>
+        <div class="columns is-multiline  mt-4" v-if="loading">
             <div class="column is-one-quarter "><div class="emptystate emptycard">&nbsp;</div></div>
             <div class="column is-one-quarter "><div class="emptystate emptycard">&nbsp;</div></div>
             <div class="column is-one-quarter "><div class="emptystate emptycard">&nbsp;</div></div>
             <div class="column is-one-quarter "><div class="emptystate emptycard">&nbsp;</div></div>
         </div>            
 
-        <div class="columns is-multiline  mt-6">
+        <div class="columns is-multiline  mt-4">
             <recipe-card v-for="recette in recettes" :key="recette.slug" :recipe="recette"/>
 			<div class="column is-one-quarter" v-if="!loading" >
 				<div class="card has-background-primary" >

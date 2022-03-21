@@ -1,13 +1,15 @@
 <template>
   <div>
-      <Header>
-          <h1 class="title is-1" v-if="name">{{name}}</h1>
-          <div v-else class="emptystate emptytitle"></div>
+      <Header className="is-primary">
+          
       </Header>
 
             
 
-     <div class="container is-fluid" v-if="menu">
+     <div class="container content-wrapper" v-if="menu">
+		 <h1 class="title is-2 mt-4" v-if="name">{{name}}</h1>
+        <div v-else class="emptystate emptytitle"></div>
+		
         <nav class="level">
             <div class="level-left">
             </div>
