@@ -42,30 +42,19 @@
 			</div>
 			<div class="columns mb-5">
 				<div class="column">
-				<!-- <div class="level">
-					<div>
-						<h2 class="title is-3">Calendrier</h2>
-						<p class="subtitle is-6">Le calendrier te permet de planifier ton menu de camp. Tu peux également déplacer des recettes de nouveau dans tes recettes à planifier. <br/>Le calendrier est sauvegardé automatiquement dans ton navigateur.</p>  
-					</div>
-					<div v-if="menu">
-						<nuxt-link class="button is-primary" to="menu/voir" title="Voir le menu avec les recettes et la liste de courses">📃 Voir et partager le menu</nuxt-link>
-						<button class="button" title="Recommencer" @click="resetMenu" :disabled="menu==null">🗑️ Recommencer</button>
-					</div>
-				</div> -->
 					
-						<div class="columns is-multiline mb-5">
-							<MenuDay v-for="(recipes, day) in menu" :key="day" :day="day" :recipes="recipes"  />
-						</div>
-					
-					
-				<!-- <article class="message is-warning">
-					<div class="message-body">
-					Sélectionne d'abord les dates de ton camp et le nombre de couverts.
-					</div>
-				</article> -->
-						
-					</div>
+					<div class="columns is-multiline mb-5">
+						<MenuDay v-for="(recipes, day) in menu" :key="day" :day="day" :recipes="recipes"  />
+					</div>						
 				</div>
+			</div>
+			<div class="level mb-5">
+				<div class="level-left"></div>
+				<div class="level-right">
+					<button class="button level-item" title="Recommencer" @click="resetMenu" :disabled="menu==null">🗑️ Recommencer</button>
+					<nuxt-link class="button is-primary level-item" to="menu/voir" title="Sauvegarder le menu en ligne">💾 Sauvegarder</nuxt-link>
+				</div>
+			</div>
 		</div>
 		<div v-else>
 			<div class="columns is-centered mb-5">
