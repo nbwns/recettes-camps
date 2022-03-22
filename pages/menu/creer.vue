@@ -260,7 +260,7 @@ export default {
 				this.shareId = response.data.ID;
 				this.sendingData = false;
 				this.menuUrl = `${window.location.origin}/menu/voir?id=${this.shareId}`;
-				this.$store.commit('addToSavedMenus', {name: this.name, id:this.shareId});
+				this.$store.commit('addToSavedMenus', {name: shareableMenu.name, id:this.shareId});
 				//clear current menu
 				this.resetMenu()
 			});
