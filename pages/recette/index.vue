@@ -22,9 +22,9 @@
 					<div class="level-right">
 						<div class="level-item">
 							<div class="buttons">
-								<button class="button is-primary" @click="addToUnplannedRecipes(recette)" :disabled="recette === null">📝 Ajouter au menu</button>
+								<button class="button is-primary" @click="addToUnplannedRecipes(recette)" :disabled="recette === null"><i class="fa fa-solid fa-plus pr-2"></i> Ajouter au menu</button>
 								<!--<button class="button">✨ Personnaliser</button>-->
-								<button class="button" @click="print()" :disabled="recette === null">🖨️ Imprimer</button>
+								<button class="button" @click="print()" :disabled="recette === null"><i class="fa-solid fa-print pr-2"></i> Imprimer</button>
 							</div>
 						</div>
 					</div>
@@ -240,7 +240,7 @@ export default {
                   {
                       text : 'Voir le menu',
                       onClick : (e, toastObject) => {
-                          this.$router.push({ path: 'menu' })
+                          this.$router.push({ path: 'menu/creer' })
                       }
                   }
                 ]
