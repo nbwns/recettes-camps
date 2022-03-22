@@ -52,7 +52,13 @@
 				<div class="level-left"></div>
 				<div class="level-right">
 					<button class="button level-item" title="Recommencer" @click="resetMenu" :disabled="menu==null">🗑️ Recommencer</button>
-					<nuxt-link class="button is-primary level-item" to="menu/voir" title="Sauvegarder le menu en ligne">💾 Sauvegarder</nuxt-link>
+					 <button class="button is-primary" @click="shareModal=true"  v-if="!this.menuUrl" title="Sauvegarder le menu en ligne">💾 Sauvegarder</button>
+                         <span class="control has-icons-right" v-if="this.menuUrl">
+						 	<input class="input" type="text" v-model="menuUrl" readonly>
+							 <span class="icon is-small is-right is-clickable" style="pointer-events:all">
+								<i class="fas fa-copy" title="Copier dans le presse-papier" @click="copyToClipboard"></i>
+							</span>
+						 </span>
 				</div>
 			</div>
 		</div>
@@ -112,12 +118,43 @@
 			</div>
 	  	</div>
 	  </div>
-	  
+	  <div class="modal" :class="{'is-active': shareModal}">
+        <div class="modal-background"></div>
+        <div class="modal-content">
+            <div class="card">
+              <header class="card-header">
+                <p class="card-header-title">
+                  Sauvegarde ton menu
+                </p>
+              </header>
+              <div class="card-content">
+                  <div class="content">
+                    <p>
+                      Ton menu sera <strong>sauvegardé en ligne</strong> et tu pourras le <strong>partager</strong>. Tu pourras le retrouver dans la page "Mes menus".
+                    </p>
+                    <p>
+                      Quand ton menu changera, tu devras le sauvegarder de nouveau.
+                    </p>
+                    <form  v-on:submit.prevent="shareMenu">
+                      <div class="field">
+                        <label class="label">Nom du menu</label>
+                          <div class="control">
+                              <input class="input" type="text" v-model="name" placeholder="Menu du camp d'été de la 97ème" required readonly>
+                          </div>
+                      </div>
+                      <button class="button is-primary" :disabled="sendingData">
+                        <span v-if="!sendingData">☁️ Sauvegarder le menu en ligne</span>
+                        <span v-else>...</span>
+                      </button>
+                      <button class="button" :disabled="sendingData" @click="shareModal=false">Annuler</button>
+                    </form>
+                  </div>
+                </div>
+            </div>
+        </div>
+        <button class="modal-close is-large" aria-label="close" @click="shareModal=false"></button>
+      </div>
 	</div>
-</div>
-      
-      
-  </div>
 </template>
 
 <script>
@@ -139,7 +176,11 @@ export default {
         name: null,
 		plates:null,
         start: null,
-        end: null
+        end: null,
+		shareModal: false,
+		menuUrl: null,
+		sendingData: false,
+		shareId: null
       }
     },
     computed:{
@@ -187,7 +228,53 @@ export default {
             position: "top-center", 
             duration : 1000
         });
-      }
+      },
+	  shareMenu(){
+			let shareableMenu = {
+				attendees: this.$store.state.attendees,
+				menu: this.$store.state.menu,
+				name: this.menuName
+			}
+
+			this.sendingData = true;
+			this.$axios.post("https://hook.integromat.com/sqep1g9vmcrbvt13tfzcjmvv1rcwzods?action=save&id=" + this.menuName, shareableMenu)
+			.then(response => {
+				this.shareId = response.data.ID;
+				console.log(this.shareId)
+				this.sendingData = false;
+				this.shareModal = false;
+				this.menuUrl = `${window.location.origin}/menu/voir?id=${this.shareId}`;
+				this.$store.commit('addToSavedMenus', {name: this.menuName, id:this.shareId});
+				this.$toast.show('👍 Menu sauvegardé ', { 
+					theme: "bubble", 
+					position: "top-center", 
+					duration : 1500,
+					action : [
+					{
+						text : 'Voir',
+						onClick : (e, toastObject) => {
+							this.$router.push({ path: `/menu/voir?id=${this.shareId}` })
+						}
+					}
+					]
+				});
+			});
+      	},
+		copyToClipboard(){
+			navigator.clipboard.writeText(this.menuUrl).then(() => {
+				this.$toast.show('Copié dans le presse-papier', { 
+					theme: "bubble", 
+					position: "top-center", 
+					duration : 1000
+				});
+			},() => {
+				this.$toast.show('Oups, ça n\'a pas marché', { 
+					theme: "bubble", 
+					position: "top-center", 
+					duration : 1000
+				});
+			});
+		}
     }
 }
 </script>
