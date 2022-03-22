@@ -33,6 +33,15 @@
 								</div>
 							</nuxt-link>
 						</div>
+						<div class="column is-one-quarter" v-if="menu">
+							<nuxt-link  to="menu/creer">
+								<div class="card has-background-primary" >
+									<div class="card-content has-text-white">
+										<i class="fa fa-solid fa-plus pr-2"></i> Editer le menu en cours
+									</div>
+								</div>
+							</nuxt-link>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -63,7 +72,12 @@ export default {
         set(value){
           this.$store.commit('updateSavedMenus', value);
         }
-      }
+      },
+	  menu: {
+		  get() {
+            return this.$store.state.menu
+        }
+	  }
     },
     methods:{
       

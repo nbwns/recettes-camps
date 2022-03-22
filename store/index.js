@@ -2,6 +2,7 @@ import VuexPersistence from 'vuex-persist'
 
 export const state = () => ({
     attendees: null,
+	name: null,
     unplannedRecipes: [],
     menu: null,
     trigger: 0,
@@ -46,6 +47,9 @@ export const state = () => ({
     },
     setAttendees(state, attendees){
         state.attendees = attendees;
+    },
+	setName(state, name){
+        state.name = name;
     },
     addToSavedMenus(state, menuId){
         state.savedMenus.push(menuId);

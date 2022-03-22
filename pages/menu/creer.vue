@@ -4,8 +4,9 @@
       </Header>
       <div class="container content-wrapper"> 
 		  	<h2 class="title is-2 mt-4">
-				Planifier un menu
+				Planifier un nouveau menu
 			</h2>
+		<div v-if="menu">
 			<nav class="level">
 				<div class="level-left"></div>
 				<div class="level-right"><menu-price/></div>
@@ -51,73 +52,78 @@
 						<button class="button" title="Recommencer" @click="resetMenu" :disabled="menu==null">🗑️ Recommencer</button>
 					</div>
 				</div> -->
-					<div v-if="menu">
+					
 						<div class="columns is-multiline mb-5">
 							<MenuDay v-for="(recipes, day) in menu" :key="day" :day="day" :recipes="recipes"  />
 						</div>
-					</div>
-					<div v-else>
+					
+					
 				<!-- <article class="message is-warning">
 					<div class="message-body">
 					Sélectionne d'abord les dates de ton camp et le nombre de couverts.
 					</div>
 				</article> -->
-						<div class="columns is-centered">
-							 <div class="column is-half">
-						<nav class="panel">
-							<p class="panel-heading">
-								Configuration du menu
-							</p>
-							<div class="panel-block">
-								<form v-on:submit.prevent="initMenu">
-									<div class="field">
-										<div class="label ">
-											<label class="label">Nom</label>
-										</div>
-										<div class="control">
-											<input class="input" type="text" v-model="name" placeholder="Menu d'été de la 97ème" required>
-										</div>
-									</div>
-									<div class="field">
-										<div class="label ">
-											<label class="label">Date de début</label>
-										</div>
-										<div class="control">
-											<input class="input" type="date" v-model="start" placeholder="15/07/2021" required>
-										</div>
-									</div>
-									<div class="field">
-										<div class="label">
-											<label class="label">Date de fin</label>
-										</div>
-										<div class="control">
-											<input class="input" type="date" v-model="end" placeholder="30/07/2021" required>
-										</div>
-									</div>
-									<div class="field">
-										<div class="label ">
-											<label class="label">Couverts</label>
-										</div>
-										<div class="control">
-											<input class="input" type="number" v-model="plates" placeholder="25" required>
-										</div>
-										<p class="help">Cela servira à étalonner les quantités de chaque recette, de calculer le budget et créer la liste de courses.</p>
-									</div>
-									<div class="field">
-									<div class="control">
-										<button class="button is-primary">
-										C'est bon !
-										</button>
-									</div>
-									</div>
-								</form>
-							</div>
-						</nav>
-							 </div>
-						</div>
+						
 					</div>
 				</div>
+		</div>
+		<div v-else>
+			<div class="columns is-centered mb-5">
+				<div class="column is-half">
+					<nav class="panel">
+						<p class="panel-heading">
+							Paramètres du menu
+						</p>
+						<div class="panel-block">
+							<form v-on:submit.prevent="initMenu">
+								<div class="field">
+									<div class="label ">
+										<label class="label">Nom</label>
+									</div>
+									<div class="control">
+										<input class="input" type="text" v-model="name" placeholder="Menu d'été de la 97ème" required>
+									</div>
+								</div>
+								<div class="field">
+									<div class="label ">
+										<label class="label">Date de début</label>
+									</div>
+									<div class="control">
+										<input class="input" type="date" v-model="start" placeholder="15/07/2021" required>
+									</div>
+								</div>
+								<div class="field">
+									<div class="label">
+										<label class="label">Date de fin</label>
+									</div>
+									<div class="control">
+										<input class="input" type="date" v-model="end" placeholder="30/07/2021" required>
+									</div>
+								</div>
+								<div class="field">
+									<div class="label ">
+										<label class="label">Couverts</label>
+									</div>
+									<div class="control">
+										<input class="input" type="number" v-model="plates" placeholder="25" required>
+									</div>
+									<p class="help">Cela servira à étalonner les quantités de chaque recette, de calculer le budget et créer la liste de courses.</p>
+								</div>
+								<div class="field">
+								<div class="control">
+									<button class="button is-primary">
+									OK
+									</button>
+								</div>
+								</div>
+							</form>
+						</div>
+					</nav>
+				</div>
 			</div>
+	  	</div>
+	  </div>
+	  
 	</div>
 </div>
       
@@ -141,7 +147,8 @@ export default {
     },
     data() {
       return {
-        plates:null,
+        name: null,
+		plates:null,
         start: null,
         end: null
       }
@@ -168,6 +175,7 @@ export default {
       initMenu(){
         if(this.start && this.end && this.plates){
           this.$store.commit('setAttendees', this.plates);
+          this.$store.commit('setName', this.name);
           let startMoment = moment(this.start);
           let endMoment = moment(this.end);
           let diff = endMoment.diff(startMoment, 'days');
