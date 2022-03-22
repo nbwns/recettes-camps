@@ -18,7 +18,7 @@
 					<h2 class="title is-3">Recettes à planifier</h2> 
 					<p class="subtitle is-6">Ta collection de recettes trop miam que tu as envie de cuisiner pendant ton camp. <br/>Cette liste est sauvegardée automatiquement dans ton navigateur.</p>  
 				</div>
-				<button class="button mt-0" title="Vider la liste des recettes disponibles" @click="unplannedRecipes = []" :disabled="unplannedRecipes.length === 0">🗑️ Vider la liste</button>
+				<button class="button mt-0" title="Vider la liste des recettes disponibles" @click="unplannedRecipes = []" :disabled="unplannedRecipes.length === 0">Vider la liste</button>
 				</div>
 				<div >
 				<div class="dashed-slot">
@@ -34,7 +34,7 @@
 				<div v-if="unplannedRecipes.length == 0">
 				<article class="message is-warning mt-5">
 					<div class="message-body">
-					Tu n'as aucune recette à placer dans ton menu. Pour ajouter une recette ici, clique sur "📝 Ajouter au menu" dans les recettes que tu veux planifier.
+					Tu n'as aucune recette à placer dans ton menu. Pour ajouter une recette ici, clique sur "Ajouter au menu" pour les recettes que tu veux planifier.
 					</div>
 				</article>
 				</div>
@@ -51,14 +51,8 @@
 			<div class="level mb-5">
 				<div class="level-left"></div>
 				<div class="level-right">
-					<button class="button level-item" title="Recommencer" @click="resetMenu" :disabled="menu==null">🗑️ Recommencer</button>
-					 <button class="button is-primary" @click="shareModal=true"  v-if="!this.menuUrl" title="Sauvegarder le menu en ligne">💾 Sauvegarder</button>
-                         <span class="control has-icons-right" v-if="this.menuUrl">
-						 	<input class="input" type="text" v-model="menuUrl" readonly>
-							 <span class="icon is-small is-right is-clickable" style="pointer-events:all">
-								<i class="fas fa-copy" title="Copier dans le presse-papier" @click="copyToClipboard"></i>
-							</span>
-						 </span>
+					<button class="button level-item" title="Recommencer" @click="resetMenu" :disabled="menu==null">Recommencer</button>
+					<button class="button is-primary" @click="shareModal=true"  v-if="!this.menuUrl" title="Sauvegarder le menu en ligne"><i class="fa-solid fa-floppy-disk pr-2"></i> Sauvegarder</button>
 				</div>
 			</div>
 		</div>
@@ -124,31 +118,46 @@
             <div class="card">
               <header class="card-header">
                 <p class="card-header-title">
-                  Sauvegarde ton menu
+                	Sauvergarder "{{this.menuName}}"
                 </p>
               </header>
               <div class="card-content">
-                  <div class="content">
+                  <div class="content" v-if="menu && !menuUrl">
                     <p>
-                      Ton menu sera <strong>sauvegardé en ligne</strong> et tu pourras le <strong>partager</strong>. Tu pourras le retrouver dans la page "Mes menus".
+                      Ton menu sera <strong>sauvegardé en ligne</strong> et tu pourras le <strong>partager</strong>. Tu le retrouveras dans la page "Mes menus".
                     </p>
-                    <p>
-                      Quand ton menu changera, tu devras le sauvegarder de nouveau.
-                    </p>
-                    <form  v-on:submit.prevent="shareMenu">
-                      <div class="field">
-                        <label class="label">Nom du menu</label>
-                          <div class="control">
-                              <input class="input" type="text" v-model="name" placeholder="Menu du camp d'été de la 97ème" required readonly>
-                          </div>
-                      </div>
-                      <button class="button is-primary" :disabled="sendingData">
-                        <span v-if="!sendingData">☁️ Sauvegarder le menu en ligne</span>
-                        <span v-else>...</span>
-                      </button>
-                      <button class="button" :disabled="sendingData" @click="shareModal=false">Annuler</button>
+                    <form v-on:submit.prevent="shareMenu">
+                      <div class="level mb-4">
+						<div class="level-left"></div>
+						<div class="level-right">
+                      		<button type="button" class="button mr-4" :disabled="sendingData" @click="shareModal=false">Annuler</button>
+							<button type="submit" class="button is-primary" :disabled="sendingData">
+								<span v-if="!sendingData">Sauvegarder</span>
+								<span v-else>...</span>
+							</button>
+						</div>
+					  </div>
+					  
                     </form>
                   </div>
+				  <div  class="content" v-if="!menu">
+					<p>
+						Yes, ton menu est sauvegardé en ligne !
+					</p>
+					<span class="control has-icons-right" >
+						<input class="input" type="text" v-model="menuUrl" readonly>
+						<span class="icon is-small is-right is-clickable" style="pointer-events:all">
+							<i class="fas fa-copy" title="Copier dans le presse-papier" @click="copyToClipboard"></i>
+						</span>
+						
+					</span>
+					<div class="level mb-4 mt-4">
+						<div class="level-left"></div>
+						<div class="level-right">
+                      		<button type="button" class="button" @click="shareModal=false">Fermer</button>
+						</div>
+					  </div>
+				  </div>
                 </div>
             </div>
         </div>
@@ -199,13 +208,22 @@ export default {
         set(value){
           this.$store.commit('updateMenu', value);
         }
-      }
+      },
+	  menuName: {
+		get(){
+			return this.$store.state.name
+		},
+		set(value){
+			this.$store.commit('setName', value);
+		}
+	  }
     },
     methods:{
       initMenu(){
         if(this.start && this.end && this.plates){
           this.$store.commit('setAttendees', this.plates);
-          this.$store.commit('setName', this.name);
+			//save name in vuex store
+		  this.menuName = this.name;
           let startMoment = moment(this.start);
           let endMoment = moment(this.end);
           let diff = endMoment.diff(startMoment, 'days');
@@ -221,43 +239,30 @@ export default {
         let plannedRecipes = Object.values(this.menu).flat();
         this.$store.commit('addToUnplannedRecipes', plannedRecipes);
         this.menu = null;
+		this.plates = null;
+		this.start = null;
+		this.end = null;
+		this.name = null;
       },
       notifySave(){
-        this.$toast.show('💾 Sauvegardé', { 
-            theme: "bubble", 
-            position: "top-center", 
-            duration : 1000
-        });
+        
       },
 	  shareMenu(){
 			let shareableMenu = {
 				attendees: this.$store.state.attendees,
 				menu: this.$store.state.menu,
-				name: this.menuName
+				name: this.$store.state.name
 			}
 
 			this.sendingData = true;
 			this.$axios.post("https://hook.integromat.com/sqep1g9vmcrbvt13tfzcjmvv1rcwzods?action=save&id=" + this.menuName, shareableMenu)
 			.then(response => {
 				this.shareId = response.data.ID;
-				console.log(this.shareId)
 				this.sendingData = false;
-				this.shareModal = false;
 				this.menuUrl = `${window.location.origin}/menu/voir?id=${this.shareId}`;
-				this.$store.commit('addToSavedMenus', {name: this.menuName, id:this.shareId});
-				this.$toast.show('👍 Menu sauvegardé ', { 
-					theme: "bubble", 
-					position: "top-center", 
-					duration : 1500,
-					action : [
-					{
-						text : 'Voir',
-						onClick : (e, toastObject) => {
-							this.$router.push({ path: `/menu/voir?id=${this.shareId}` })
-						}
-					}
-					]
-				});
+				this.$store.commit('addToSavedMenus', {name: this.name, id:this.shareId});
+				//clear current menu
+				this.resetMenu()
 			});
       	},
 		copyToClipboard(){

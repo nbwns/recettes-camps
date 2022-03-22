@@ -15,6 +15,15 @@
 				</div>
 				<div >
 					<div class="columns is-multiline  mt-4">
+						<div class="column is-one-quarter" v-if="menuBeingCreated">
+							<nuxt-link  to="menu/creer">
+								<div class="card has-background-info" >
+									<div class="card-content has-text-white">
+										<i class="fas fa-edit pr-2"></i> Editer "{{this.currentMenuName}}"
+									</div>
+								</div>
+							</nuxt-link>
+						</div>
 						<div class="column is-one-quarter" v-for="m in savedMenus" :key="m.id" >
 							<nuxt-link  :to="'menu/voir?id='+m.id">
 								<div class="card" >
@@ -29,15 +38,6 @@
 								<div class="card has-background-primary" >
 									<div class="card-content has-text-white">
 										<i class="fa fa-solid fa-plus pr-2"></i> Créer un nouveau menu
-									</div>
-								</div>
-							</nuxt-link>
-						</div>
-						<div class="column is-one-quarter" v-if="menu">
-							<nuxt-link  to="menu/creer">
-								<div class="card has-background-primary" >
-									<div class="card-content has-text-white">
-										<i class="fa fa-solid fa-plus pr-2"></i> Editer le menu en cours
 									</div>
 								</div>
 							</nuxt-link>
@@ -73,10 +73,15 @@ export default {
           this.$store.commit('updateSavedMenus', value);
         }
       },
-	  menu: {
+	  menuBeingCreated: {
 		  get() {
-            return this.$store.state.menu
+            return this.$store.state.menu !== null
         }
+	  },
+	  currentMenuName: {
+		  get(){
+			  return this.$store.state.name
+		  }
 	  }
     },
     methods:{

@@ -52,11 +52,7 @@ export default {
     },
     methods:{
         notifySave(){
-            this.$toast.show('💾 Sauvegardé', { 
-                theme: "bubble", 
-                position: "top-center", 
-                duration : 1000
-            });
+  
         }
     }
 }
