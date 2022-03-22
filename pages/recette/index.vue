@@ -1,34 +1,37 @@
 <template>
     <div>
         <div>
-            <Header>
-            <nuxt-link to="/" class="no-print">&lt; Retour</nuxt-link>
-            <div class="block" v-if="recette">
-                <h1 class="title is-1 pt-2 mb-0" >
-                    {{recette.nom}}
-                </h1>
-                par <a :href="`mailto:${recette.contactAuteur}&subject=Question sur ta recette de ${recette.nom}`">{{recette.auteur}}</a>
-            </div>
-            <div class="emptystate emptytitle" v-else>&nbsp;</div>
+            <Header className="is-primary">
+				
             </Header>
         
-            <div class="container is-fluid">  
-            <nav class="level no-print">
-                <div class="level-left">
-                </div>
-                <div class="level-right">
-                    <div class="level-item">
-                        <div class="buttons">
-                            <button class="button is-primary" @click="addToUnplannedRecipes(recette)" :disabled="recette === null">📝 Ajouter au menu</button>
-                            <!--<button class="button">✨ Personnaliser</button>-->
-                            <button class="button" @click="print()" :disabled="recette === null">🖨️ Imprimer</button>
-                        </div>
-                    </div>
-                </div>
-            </nav>
+            <div class="container content-wrapper">  
+				<nuxt-link to="/" class="no-print">&lt; Retour</nuxt-link>
+				<div class="block" v-if="recette">
+					<h1 class="title is-1 pt-2 mb-0" >
+						{{recette.nom}}
+					</h1>
+					par <a :href="`mailto:${recette.contactAuteur}&subject=Question sur ta recette de ${recette.nom}`">{{recette.auteur}}</a>
+				</div>
+				<div class="emptystate emptytitle" v-else>&nbsp;</div>
+				
+				
+				<nav class="level no-print">
+					<div class="level-left">
+					</div>
+					<div class="level-right">
+						<div class="level-item">
+							<div class="buttons">
+								<button class="button is-primary" @click="addToUnplannedRecipes(recette)" :disabled="recette === null"><i class="fa fa-solid fa-plus pr-2"></i> Ajouter au menu</button>
+								<!--<button class="button">✨ Personnaliser</button>-->
+								<button class="button" @click="print()" :disabled="recette === null"><i class="fa-solid fa-print pr-2"></i> Imprimer</button>
+							</div>
+						</div>
+					</div>
+				</nav>
             
 
-            <div class="columns" v-if="recette && recette.description != null">
+            	<div class="columns" v-if="recette && recette.description != null">
                 <div class="column">
                     <article class="message is-info">
                         <div class="message-body">
@@ -36,8 +39,8 @@
                         </div>
                     </article>
                 </div>
-            </div>  
-            <div class="columns">
+            	</div>  
+            	<div class="columns">
                 <div class="column">
                     <h2 class="is-size-4">Ingrédients</h2>
                     
@@ -154,7 +157,7 @@
                         </div>
                     </div>
                 </div>
-            </div>            
+            	</div>            
             </div>
             <div class="modal" :class="{'is-active': modalPrice}">
             <div class="modal-background"></div>
@@ -237,7 +240,7 @@ export default {
                   {
                       text : 'Voir le menu',
                       onClick : (e, toastObject) => {
-                          this.$router.push({ path: 'menu' })
+                          this.$router.push({ path: 'menu/creer' })
                       }
                   }
                 ]

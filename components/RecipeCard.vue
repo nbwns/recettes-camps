@@ -77,7 +77,7 @@ export default {
                             {
                                 text : 'Voir le menu',
                                 onClick : (e, toastObject) => {
-                                    this.$router.push({ path: 'menu' })
+                                    this.$router.push({ path: 'menu/creer' })
                                 }
                             }
                             ]
