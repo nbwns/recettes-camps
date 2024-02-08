@@ -7,10 +7,6 @@
 				Planifier un nouveau menu
 			</h2>
 		<div v-if="menu">
-			<nav class="level">
-				<div class="level-left"></div>
-				<div class="level-right"><menu-price/></div>
-			</nav>
 			<div class="columns">
 			<div class="column">
 				<div class="level">

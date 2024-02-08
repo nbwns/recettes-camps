@@ -57,27 +57,11 @@
                         </div>
                     </div>
                    
-                    <div class="columns m-0 p-0 is-mobile">
-                        <div class="column">
-                            <strong>Quantité</strong>
-                        </div>
-                        <div class="column">
-                            <strong>Prix indicatif</strong>
-                             <span class="clickable"  @click="modalPrice = true"><i class="fa fa-info-circle"></i></span>
-                        </div>
-                    </div>
                     <div v-if="recette">
                         <div v-for="compo in recette.compositions" :key="compo.nom" class="columns m-0 p-0 is-mobile">
                             <div class="column">
                                 {{Math.round((compo.quantite * plateRatio)*1000)/1000}} {{compo.unites}} {{compo.nomIngredient[0]}}
                             </div>
-                            <div class="column" :class="{'has-text-danger' : compo.prixManquant == 1}" :title="(compo.prixManquant == 1) ? 'Le prix de cet ingrédient n\'est pas encore encodé, cela peut fausser le calcul du budget' : ''">
-                                {{ (compo.prix * plateRatio).toFixed(2) }} €
-                            </div>
-                        </div>
-                        <div class="columns is-mobile m-0 p-0">
-                            <div class="column"><strong>Prix du plat</strong></div>
-                            <div class="column">{{(recette.prix * plateRatio).toFixed(2)}} €</div>
                         </div>
                     </div>
                     <div v-else>

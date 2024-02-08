@@ -6,7 +6,8 @@
 
             
 
-     <div class="container content-wrapper">
+	<div v-if="notFound">Ce menu n'existe pas 👻</div>
+	<div v-else class="container content-wrapper">
 		<h1 class="title is-2 mt-4" v-if="name">{{name}}</h1>
         <div v-else class="emptystate emptytitle">Récupération du menu</div>
 		
@@ -15,7 +16,6 @@
 				<div class="level-left">
 					<div class="tabs">
 						<ul>
-							<li><a href="#budget">Budget</a></li>
 							<li><a href="#calendrier">Calendrier</a></li>
 							<li><a href="#recettes">Recettes</a></li>
 							<li><a href="#liste">Liste de course</a></li>
@@ -30,25 +30,6 @@
 					</div>
 				</div>
 			</nav>
-			<!-- budget -->
-			<div class="block" id="budget">
-				<h2 class="title is-3">💰 Budget</h2>
-				<table class="table">
-					<thead>
-						<th>Tout le camp</th>
-						<th>Par personne</th>
-						<th>Moyen / jour</th>
-						<th>Moyen / personne / jour </th>
-					</thead>
-					<tr>
-						<td class="has-text-right">{{Number(budget.getTotalBudget()).toFixed(2)}}€</td>
-						<td class="has-text-right">{{Number(budget.getBudgetPerServing()).toFixed(2)}}€</td>
-						<td class="has-text-right">{{Number(budget.getAverageBudgetPerDay()).toFixed(2)}}€</td>
-						<td class="has-text-right">{{Number(budget.getAverageBudgetPerServingPerDay()).toFixed(2)}}€</td>
-					</tr>
-				</table>
-			</div>
-			<hr/>
 			<!-- calendrier -->
 			<div class="block" id="calendrier">
 					<h2 class="title is-3">📅 Calendrier</h2>
@@ -74,19 +55,16 @@
 									<th>Quantité</th>
 									<th>Unité</th>
 									<th>Ingrédient</th>
-									<th>Prix</th>
 								</thead>
 								<tbody>
 									<tr v-for="c in r.compositions" :key="c.nom">
 										<td class="has-text-right">{{Math.floor(c.quantite * (attendees / r.nombreDePersonnes))}}</td>
 										<td>{{c.unites}}</td>
 										<td>{{c.nomIngredient[0]}}</td>
-										<td class="has-text-right">{{Number(c.prix * (attendees / r.nombreDePersonnes)).toFixed(2)}}€</td>
 									</tr>
 								</tbody>
 								<tfoot>
 									<td colspan="3"><strong>Total</strong></td>
-									<td class="has-text-right">{{Number(r.budget).toFixed(2)}}€</td>
 								</tfoot>
 							</table>
 						</div>
@@ -137,7 +115,8 @@ export default {
             name: null,
             budget: null,
             shoppingList: null,
-            unfold: false
+            unfold: false,
+			notFound: false
         }
     },
     computed:{
@@ -177,6 +156,14 @@ export default {
                     let sl = new ShoppingListGenerator(this.menu,this.attendees);
                     this.shoppingList = sl.generate();
                 })
+				.catch((error) => {
+					this.notFound = true;
+					if (error.response) {
+						console.log(error.response.data);
+						console.log(error.response.status);
+						console.log(error.response.headers);
+					}
+				});
             }
         }
     },
